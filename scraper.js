@@ -95,18 +95,34 @@ if (name === 'Mailgun') {
     }
   }
   
-  // Resend specific
-  if (name === 'Resend') {
-    const dailyMatch = text.match(/(\d+)\s+emails?\s+per\s+day/i);
-    const monthMatch = text.match(/(\d+,\d+)\s+emails?\s+per\s+month/i);
-    if (dailyMatch && monthMatch) {
-      return {
-        dailyLimit: parseInt(dailyMatch[1]),
-        monthlyLimit: parseInt(monthMatch[1].replace(',', '')),
-        note: null
-      };
-    }
+// Resend specific
+if (name === 'Resend') {
+  // Look for "Daily Limit" followed by a number (from table)
+  const dailyMatch = text.match(/Daily\s+Limit[^\d]*(\d+)/i) ||
+                     text.match(/(\d+)\s+emails?\s+(?:per|\/)\s*day/i);
+  
+  // Look for "X emails / mo" at bottom of page
+  const monthMatch = text.match(/(\d+,?\d*)\s+emails?\s*\/\s*mo/i) ||
+                     text.match(/(\d+,?\d*)\s+emails?\s+(?:per|\/)\s*month/i);
+  
+  if (dailyMatch && monthMatch) {
+    return {
+      dailyLimit: parseInt(dailyMatch[1]),
+      monthlyLimit: parseInt(monthMatch[1].replace(',', '')),
+      note: null
+    };
   }
+  
+  // Fallback: if we find monthly but not daily, calculate daily
+  if (monthMatch) {
+    const monthly = parseInt(monthMatch[1].replace(',', ''));
+    return {
+      dailyLimit: Math.floor(monthly / 30),
+      monthlyLimit: monthly,
+      note: null
+    };
+  }
+}
   
   // Brevo specific
   if (name === 'Brevo (Sendinblue)') {
