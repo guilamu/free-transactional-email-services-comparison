@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write  # This is the key line!
+  contents: write
 
 jobs:
   scrape-and-update:
@@ -23,17 +23,14 @@ jobs:
         with:
           node-version: '18'
       
+      - name: Install dependencies
+        run: npm install cheerio axios
+      
       - name: Run scraper
         run: node scraper.js
       
-      - name: Show generated data
-        run: |
-          echo "Generated data.json:"
-          cat data.json
-      
-      - name: Commit updated data
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-          git add data.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update pricing data [automated]" && git push)
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update pricing data [automated]
+          file_pattern: data.json
