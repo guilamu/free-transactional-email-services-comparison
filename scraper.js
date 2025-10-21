@@ -1,5 +1,8 @@
+'use strict';
+
 const fs = require('fs');
 
+// Entry banner
 console.log('🚀 Starting email service scraper with change tracking...\n');
 
 // Fallback data - accurate as of October 2025
@@ -11,7 +14,7 @@ const fallbackData = [
   { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing', note: null },
   { name: 'Elastic Email', dailyLimit: 100, monthlyLimit: 3000, url: 'https://elasticemail.com/pricing', note: null },
   { name: 'Amazon SES', dailyLimit: 100, monthlyLimit: 3000, url: 'https://aws.amazon.com/ses/pricing/', note: 'First 12 months with AWS Free Tier' },
-  { name: 'SMTP2GO', dailyLimit: 33, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/', note: null },
+  { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/', note: null },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/', note: 'Email testing sandbox' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing', note: 'Requires credit card' },
   { name: 'Mailchimp Transactional', dailyLimit: 17, monthlyLimit: 500, url: 'https://mailchimp.com/pricing/transactional-email/', note: 'For Mailchimp users only' },
@@ -25,206 +28,234 @@ function loadPreviousData() {
       const content = fs.readFileSync('data.json', 'utf8');
       return JSON.parse(content);
     }
+    return [];
   } catch (error) {
-    console.log('⚠️  Could not load previous data:', error.message);
+    console.log('⚠️ Could not load previous data:', error.message);
+    return [];
   }
-  return [];
 }
 
 // Simple text extraction function
-function extractFromText(text, name) {
+function extractFromText(rawText, name) {
+  if (!rawText) return null;
+
+  // Normalize common whitespace quirks
+  const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
-// SendPulse specific
-if (name === 'SendPulse') {
-  // Look for the free plan - shows "12000 emails" and "Free"
-  const monthMatch = text.match(/(\d+,?\d*)\s*emails?\s*Free/i) || 
-                     text.match(/Free.*?(\d+,?\d*)\s*emails?/i);
-  
-  if (monthMatch) {
-    const monthly = parseInt(monthMatch[1].replace(',', ''));
-    const daily = Math.floor(monthly / 30);
-    console.log(`   [DEBUG] Found SendPulse free plan: ${monthly} emails/month`);
-    return {
-      dailyLimit: daily,
-      monthlyLimit: monthly,
-      note: null
-    };
+  // --- SendPulse ---
+  if (name === 'SendPulse') {
+    // Look for "Free" and a monthly number near it
+    const monthMatch =
+      text.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*Free/i) ||
+      text.match(/Free[^]*?(\d{1,3}(?:,\d{3})*)\s*emails?/i);
+    if (monthMatch) {
+      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
+      if (monthly > 0) {
+        const daily = Math.floor(monthly / 30);
+        return { dailyLimit: daily, monthlyLimit: monthly, note: null };
+      }
+    }
+    return null;
   }
-  
-  return null;
-}
-  
-// Mailgun specific - only free plan has "per day" limit
-if (name === 'Mailgun') {
-  // Debug: log what we're searching
-  const lowerText = text.toLowerCase();
-  const hasDay = lowerText.includes('day');
-  const hasFree = lowerText.includes('free');
-  
-  console.log(`   [DEBUG] Text contains 'day': ${hasDay}, 'free': ${hasFree}`);
-  
-  const dailyMatch = text.match(/(\d+,?\d*)\s*emails?\s*(?:per|\/)\s*day/i);
-  
-  if (dailyMatch) {
-    console.log(`   [DEBUG] Found match: "${dailyMatch[0]}" = ${dailyMatch[1]} emails/day`);
-    const daily = parseInt(dailyMatch[1].replace(',', ''));
-    return { 
-      dailyLimit: daily, 
-      monthlyLimit: daily * 30,
-      note: 'Free plan - no credit card required' 
-    };
-  } else {
-    console.log(`   [DEBUG] No daily limit pattern found in page text`);
+
+  // --- Mailgun ---
+  if (name === 'Mailgun') {
+    const dailyMatch = text.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:per|\/)\s*day\b/i);
+    if (dailyMatch) {
+      const daily = parseInt(dailyMatch[1].replace(/,/g, ''), 10);
+      if (daily > 0) {
+        return { dailyLimit: daily, monthlyLimit: daily * 30, note: 'Free plan - no credit card required' };
+      }
+    }
+    return null;
   }
-  
-  return null;
-}
-  
-  // MailerSend specific
+
+  // --- MailerSend ---
   if (name === 'MailerSend') {
     if (lowerText.includes('500 emails per month') || lowerText.includes('500 emails/month')) {
       return { dailyLimit: 100, monthlyLimit: 500, note: 'Requires credit card' };
     }
-    // Look for any "X emails per month" for free plan
-    const monthMatch = text.match(/free.*?(\d+)\s*emails?\s*(?:per|\/)\s*month/i);
+    const monthMatch = text.match(/free[^]*?(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:per|\/)\s*month\b/i);
     if (monthMatch) {
-      const monthly = parseInt(monthMatch[1]);
-      return { dailyLimit: Math.floor(monthly / 30), monthlyLimit: monthly, note: 'Requires credit card' };
+      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
+      if (monthly > 0) {
+        return { dailyLimit: Math.floor(monthly / 30), monthlyLimit: monthly, note: 'Requires credit card' };
+      }
     }
+    return null;
   }
-  
-// Resend specific
-if (name === 'Resend') {
-  // Look for "Daily Limit" row in table, then find "100" in the Free column
-  // Strategy: Find "Daily Limit" then look for the FIRST occurrence of just "100" (not part of another number)
-  const dailyPattern = /Daily\s*Limit[^\d]*?(?:\D*)(\d+)(?:\D)/i;
-  const dailyMatch = text.match(dailyPattern);
-  
-  // Look for "3,000 emails / mo" at bottom
-  const monthMatch = text.match(/(\d+,\d+)\s+emails?\s*\/\s*mo/i) ||
-                     text.match(/(\d+,\d+)\s+emails?\s*per\s*month/i);
-  
-  if (dailyMatch && monthMatch) {
-    const daily = parseInt(dailyMatch[1]);
-    const monthly = parseInt(monthMatch[1].replace(',', ''));
-    
-    // Sanity check: daily should be 100 or close to monthly/30
-    if (daily === 100 || Math.abs(daily - monthly/30) < 10) {
-      return {
-        dailyLimit: daily,
-        monthlyLimit: monthly,
-        note: null
-      };
+
+  // --- Resend ---
+  if (name === 'Resend') {
+    // Try to locate the free daily limit and monthly number
+    const dailyPattern = /Daily\s*Limit[^]*?(\b\d{1,3}\b)/i;
+    const dailyMatch = text.match(dailyPattern);
+    const monthMatch =
+      text.match(/(\d{1,3}(?:,\d{3})*)\s+emails?\s*\/\s*mo\b/i) ||
+      text.match(/(\d{1,3}(?:,\d{3})*)\s+emails?\s*per\s*month\b/i);
+    if (dailyMatch && monthMatch) {
+      const daily = parseInt(dailyMatch[1].replace(/,/g, ''), 10);
+      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
+      if (daily > 0 && monthly > 0) {
+        if (daily === 100 || Math.abs(daily - monthly / 30) < 10) {
+          return { dailyLimit: daily, monthlyLimit: monthly, note: null };
+        }
+      }
+    } else if (monthMatch) {
+      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
+      if (monthly > 0) {
+        return { dailyLimit: 100, monthlyLimit: monthly, note: null };
+      }
     }
+    return null;
   }
-  
-  // If daily parsing failed but monthly worked, calculate daily from monthly
-  if (monthMatch) {
-    const monthly = parseInt(monthMatch[1].replace(',', ''));
-    return {
-      dailyLimit: 100, // Hardcoded because we know Resend free = 100/day
-      monthlyLimit: monthly,
-      note: null
-    };
-  }
-  
-  return null;
-}
-  
-// SMTP2GO specific
-if (name === 'SMTP2GO') {
-  // Look for "1,000" or "1000" specifically followed by "emails/mo"
-  // The free plan shows this format with optional comma
-  const monthMatch = text.match(/(\d{1},?\d{3})\s*emails?\s*[\/]?\s*mo/i);
-  
-  if (monthMatch) {
-    // Remove comma and parse
-    const monthly = parseInt(monthMatch[1].replace(/,/g, ''));
-    
-    // SMTP2GO free plan is 1000 emails/month
-    // Only accept values close to 1000 to avoid capturing paid plans
-    if (monthly >= 900 && monthly <= 1100) {
-      return {
-        dailyLimit: Math.floor(monthly / 30),
-        monthlyLimit: monthly,
-        note: null
-      };
+
+  // --- SMTP2GO (FIXED) ---
+  if (name === 'SMTP2GO') {
+    // Accept both "/ mo" and "per month", and capture daily if present
+    const monthMatch =
+      text.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:\/|\bper\b)\s*(?:month|mo)\b/i);
+    const dayMatch =
+      text.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:\/|\bper\b)\s*day\b/i);
+
+    if (monthMatch && dayMatch) {
+      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
+      const daily = parseInt(dayMatch[1].replace(/,/g, ''), 10);
+      // Sanity: free plan neighborhood
+      if (monthly >= 900 && monthly <= 1100 && daily >= 150 && daily <= 250) {
+        return { dailyLimit: daily, monthlyLimit: monthly, note: null };
+      }
     }
+
+    if (monthMatch) {
+      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
+      if (monthly >= 900 && monthly <= 1100) {
+        // If daily wasn't found, default to known free-plan daily cap (200)
+        return { dailyLimit: 200, monthlyLimit: monthly, note: null };
+      }
+    }
+
+    // Explicit "Free Plan ... 1,000 ... per month" variant
+    const freePlanMonthly =
+      text.match(/free\s+plan[^]*?(\d{1,3}(?:,\d{3})*)\s*emails?[^]*?(?:month|mo)\b/i);
+    if (freePlanMonthly) {
+      const monthly = parseInt(freePlanMonthly[1].replace(/,/g, ''), 10);
+      if (monthly >= 900 && monthly <= 1100) {
+        return { dailyLimit: 200, monthlyLimit: monthly, note: null };
+      }
+    }
+
+    if (dayMatch) {
+      const daily = parseInt(dayMatch[1].replace(/,/g, ''), 10);
+      if (daily >= 150 && daily <= 250) {
+        return { dailyLimit: daily, monthlyLimit: 1000, note: null };
+      }
+    }
+
+    return null;
   }
-  
-  // Alternative: Search for the Free Plan section specifically
-  const freePlanPattern = /Free\s+Plan[^]*?(\d{1},?\d{3})\s*emails?\s*[\/]?\s*mo/i;
-  const freePlanMatch = text.match(freePlanPattern);
-  
-  if (freePlanMatch) {
-    const monthly = parseInt(freePlanMatch[1].replace(/,/g, ''));
-    return {
-      dailyLimit: Math.floor(monthly / 30),
-      monthlyLimit: monthly,
-      note: null
-    };
-  }
-  
-  return null;
-}
-  
-  // Brevo specific
+
+  // --- Brevo (Sendinblue) ---
   if (name === 'Brevo (Sendinblue)') {
-    const dailyMatch = text.match(/(\d+)\s+emails?\s+per\s+day/i);
+    const dailyMatch = text.match(/(\d{1,3}(?:,\d{3})*)\s+emails?\s+per\s+day\b/i);
     if (dailyMatch) {
-      const daily = parseInt(dailyMatch[1]);
-      return {
-        dailyLimit: daily,
-        monthlyLimit: daily * 30,
-        note: null
-      };
+      const daily = parseInt(dailyMatch[1].replace(/,/g, ''), 10);
+      if (daily > 0) {
+        return { dailyLimit: daily, monthlyLimit: daily * 30, note: null };
+      }
     }
+    return null;
   }
-  
-  // Mailjet specific
+
+  // --- Mailjet ---
   if (name === 'Mailjet') {
-    const dailyMatch = text.match(/(\d+)\s+emails?\s*(?:per|\/)\s*day/i);
-    const monthMatch = text.match(/(\d+,?\d*)\s+emails?\s*(?:per|\/)\s*month/i);
-    
+    const dailyMatch = text.match(/(\d{1,3}(?:,\d{3})*)\s+emails?\s*(?:per|\/)\s*day\b/i);
+    const monthMatch = text.match(/(\d{1,3}(?:,\d{3})*)\s+emails?\s*(?:per|\/)\s*month\b/i);
     if (dailyMatch) {
-      const daily = parseInt(dailyMatch[1]);
-      const monthly = monthMatch ? parseInt(monthMatch[1].replace(',', '')) : daily * 30;
-      return { dailyLimit: daily, monthlyLimit: monthly, note: null };
+      const daily = parseInt(dailyMatch[1].replace(/,/g, ''), 10);
+      const monthly = monthMatch ? parseInt(monthMatch[1].replace(/,/g, ''), 10) : daily * 30;
+      if (daily > 0 && monthly > 0) {
+        return { dailyLimit: daily, monthlyLimit: monthly, note: null };
+      }
     }
+    return null;
   }
-  
+
+  // Default: no extraction
   return null;
+}
+
+async function fetchWithHeaders(url, opts = {}) {
+  const headers = {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.9',
+    ...(opts.headers || {})
+  };
+
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timeout = opts.timeoutMs ?? 15000;
+  let timeoutId = null;
+  if (controller) {
+    timeoutId = setTimeout(() => controller.abort(), timeout);
+  }
+
+  try {
+    const res = await fetch(url, {
+      headers,
+      signal: controller ? controller.signal : undefined,
+      redirect: 'follow'
+    });
+    return res;
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
 }
 
 async function scrapeService(service) {
   try {
     console.log(`📧 ${service.name}`);
-    console.log(`   → Fetching ${service.url}...`);
-    
-    const response = await fetch(service.url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-      },
-      signal: AbortSignal.timeout(15000)
-    });
-    
+    console.log(` → Fetching ${service.url}...`);
+    const response = await fetchWithHeaders(service.url, { timeoutMs: 15000 });
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
-    
+
     const html = await response.text();
-    const data = extractFromText(html, service.name);
-    
+    let data = extractFromText(html, service.name);
+
+    // FIX: If SMTP2GO pricing page fails, try the Support Free Plan article
+    if (!data && service.name === 'SMTP2GO') {
+      console.log(' → Primary failed, trying support article...');
+      const supportUrl = 'https://support.smtp2go.com/hc/en-gb/articles/223087947-Free-Plan';
+      const alt = await fetchWithHeaders(supportUrl, { timeoutMs: 15000 });
+      if (alt.ok) {
+        const altHtml = await alt.text();
+        const altData = extractFromText(altHtml, service.name);
+        if (altData) {
+          console.log(` ✓ Scraped from support: ${altData.dailyLimit}/day, ${altData.monthlyLimit}/month`);
+          return {
+            name: service.name,
+            url: service.url,
+            dailyLimit: altData.dailyLimit,
+            monthlyLimit: altData.monthlyLimit,
+            note: altData.note,
+            lastScraped: new Date().toISOString(),
+            scrapedSuccessfully: true
+          };
+        }
+      }
+    }
+
     if (!data) {
-      console.log(`   ⚠️  Could not extract data, using fallback`);
+      console.log(` ⚠️ Could not extract data, using fallback`);
       return null;
     }
-    
-    console.log(`   ✓ Scraped: ${data.dailyLimit}/day, ${data.monthlyLimit}/month`);
-    
+
+    console.log(` ✓ Scraped: ${data.dailyLimit}/day, ${data.monthlyLimit}/month`);
     return {
       name: service.name,
       url: service.url,
@@ -235,77 +266,73 @@ async function scrapeService(service) {
       scrapedSuccessfully: true
     };
   } catch (error) {
-    console.log(`   ✗ Error: ${error.message}`);
+    console.log(` ✗ Error: ${error.message}`);
     return null;
   }
 }
 
 async function scrapeAll() {
   console.log('═══════════════════════════════════════\n');
-  
+
   // Load previous data to track changes
   const previousData = loadPreviousData();
-  
-const servicesToScrape = [
-  { name: 'SendPulse', url: 'https://sendpulse.com/prices/smtp' },
-  { name: 'Mailgun', url: 'https://www.mailgun.com/pricing/' },
-  { name: 'MailerSend', url: 'https://www.mailersend.com/pricing' },
-  { name: 'Resend', url: 'https://resend.com/pricing' },
-  { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
-  { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
-  { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' } 
-];
 
-  
+  const servicesToScrape = [
+    { name: 'SendPulse', url: 'https://sendpulse.com/prices/smtp' },
+    { name: 'Mailgun', url: 'https://www.mailgun.com/pricing/' },
+    { name: 'MailerSend', url: 'https://www.mailersend.com/pricing' },
+    { name: 'Resend', url: 'https://resend.com/pricing' },
+    { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
+    { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
+    { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' }
+  ];
+
   const results = [];
-  
+
   // Try to scrape services
   for (const service of servicesToScrape) {
     const data = await scrapeService(service);
     if (data) {
       results.push(data);
     }
-    
     // Polite delay between requests
     await new Promise(resolve => setTimeout(resolve, 2000));
   }
-  
+
   console.log('\n═══════════════════════════════════════\n');
-  
+
   // Add fallback data for services not scraped
   const scrapedNames = results.map(r => r.name);
   const missingServices = fallbackData.filter(f => !scrapedNames.includes(f.name));
-  
+
   console.log(`✓ Successfully scraped: ${results.length} services`);
   console.log(`✓ Using fallback data: ${missingServices.length} services\n`);
-  
+
   missingServices.forEach(service => {
     // Find previous data for this service
     const previous = previousData.find(p => p.name === service.name);
-    
     results.push({
       ...service,
       lastScraped: previous?.lastScraped || new Date().toISOString(),
-      scrapedSuccessfully: false
+      scrapedSuccessfully: false,
+      // Preserve lastChanged if no new scrape
+      lastChanged: previous?.lastChanged || null
     });
   });
-  
+
   // Check for changes and update lastChanged date
   results.forEach(service => {
     const previous = previousData.find(p => p.name === service.name);
-    
     if (previous) {
-      // Check if values changed
-      const limitsChanged = previous.dailyLimit !== service.dailyLimit || 
-                           previous.monthlyLimit !== service.monthlyLimit;
-      
+      const limitsChanged =
+        previous.dailyLimit !== service.dailyLimit ||
+        previous.monthlyLimit !== service.monthlyLimit;
       if (limitsChanged) {
         console.log(`🔄 CHANGE DETECTED: ${service.name}`);
-        console.log(`   Old: ${previous.dailyLimit}/day, ${previous.monthlyLimit}/month`);
-        console.log(`   New: ${service.dailyLimit}/day, ${service.monthlyLimit}/month`);
+        console.log(` Old: ${previous.dailyLimit}/day, ${previous.monthlyLimit}/month`);
+        console.log(` New: ${service.dailyLimit}/day, ${service.monthlyLimit}/month`);
         service.lastChanged = new Date().toISOString();
       } else {
-        // Keep previous lastChanged date
         service.lastChanged = previous.lastChanged || null;
       }
     } else {
@@ -313,16 +340,15 @@ const servicesToScrape = [
       service.lastChanged = new Date().toISOString();
     }
   });
-  
+
   // Sort by monthly limit (descending)
   results.sort((a, b) => b.monthlyLimit - a.monthlyLimit);
-  
+
   // Write to file
   fs.writeFileSync('data.json', JSON.stringify(results, null, 2));
-  
   console.log(`\n✅ Processed ${results.length} services total`);
-  console.log('   - Scraped automatically: ' + results.filter(r => r.scrapedSuccessfully).length);
-  console.log('   - Using fallback data: ' + results.filter(r => !r.scrapedSuccessfully).length);
+  console.log(' - Scraped automatically: ' + results.filter(r => r.scrapedSuccessfully).length);
+  console.log(' - Using fallback data: ' + results.filter(r => !r.scrapedSuccessfully).length);
   console.log('\n📄 data.json updated successfully\n');
 }
 
@@ -341,5 +367,5 @@ scrapeAll().catch(error => {
   });
   fallbackWithDates.sort((a, b) => b.monthlyLimit - a.monthlyLimit);
   fs.writeFileSync('data.json', JSON.stringify(fallbackWithDates, null, 2));
-  console.log('⚠️  Using complete fallback data');
+  console.log('⚠️ Using complete fallback data');
 });
