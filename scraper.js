@@ -34,6 +34,26 @@ function loadPreviousData() {
 // Simple text extraction function
 function extractFromText(text, name) {
   const lowerText = text.toLowerCase();
+
+// SendPulse specific
+if (name === 'SendPulse') {
+  // Look for the free plan - shows "12000 emails" and "Free"
+  const monthMatch = text.match(/(\d+,?\d*)\s*emails?\s*Free/i) || 
+                     text.match(/Free.*?(\d+,?\d*)\s*emails?/i);
+  
+  if (monthMatch) {
+    const monthly = parseInt(monthMatch[1].replace(',', ''));
+    const daily = Math.floor(monthly / 30);
+    console.log(`   [DEBUG] Found SendPulse free plan: ${monthly} emails/month`);
+    return {
+      dailyLimit: daily,
+      monthlyLimit: monthly,
+      note: null
+    };
+  }
+  
+  return null;
+}
   
 // Mailgun specific - only free plan has "per day" limit
 if (name === 'Mailgun') {
