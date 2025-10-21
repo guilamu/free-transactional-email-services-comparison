@@ -43,6 +43,39 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
+// Mailtrap specific (Email API/SMTP Free plan)
+if (name === 'Mailtrap') {
+  // Normalize whitespace for reliable regex
+  const page = text.replace(/\s+/g, ' ');
+
+  // Look for the Free card: "3,500 emails" and "- 150 emails/day"
+  // Monthly limit
+  const monthMatch =
+    page.match(/Free[^]*?(\d{1,3}(?:,\d{3})*)\s*emails\b/i) ||  // "Free ... 3,500 emails"
+    page.match(/Email\s*sending\s*limit\s*per\s*month\.*\s*(\d{1,3}(?:,\d{3})*)\b/i); // table: "3,500"
+
+  // Daily limit
+  const dayMatch =
+    page.match(/-?\s*150\s*emails\s*\/?\s*day/i) || // "- 150 emails/day"
+    page.match(/Email\s*sending\s*limit\s*per\s*day\.*\s*(\d{1,3})\b/i); // table: "150"
+
+  if (monthMatch || dayMatch) {
+    const monthly = monthMatch ? parseInt(monthMatch[1].replace(/,/g, ''), 10) : 3500;
+    const daily = dayMatch
+      ? (dayMatch[1] ? parseInt(dayMatch[1], 10) : 150) // handle the case where the whole match is used
+      : Math.floor(monthly / 30);
+
+    return {
+      dailyLimit: daily,              // 150
+      monthlyLimit: monthly,          // 3,500
+      note: 'Email API/SMTP'
+    };
+  }
+
+  return null;
+}
+
+  
   // Amazon SES specific
 if (name === 'Amazon SES') {
   // Normalize whitespace to make regex more reliable
@@ -320,7 +353,8 @@ async function scrapeAll() {
     { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
     { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
     { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' },
-    { name: 'Amazon SES', url: 'https://aws.amazon.com/ses/pricing/' }
+    { name: 'Amazon SES', url: 'https://aws.amazon.com/ses/pricing/' },
+    { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' }
   ];
 
   const results = [];
