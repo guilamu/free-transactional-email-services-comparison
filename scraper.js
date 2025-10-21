@@ -43,6 +43,41 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
+  // Amazon SES specific
+if (name === 'Amazon SES') {
+  // Normalize whitespace to make regex more reliable
+  const page = text.replace(/\s+/g, ' ');
+
+  // Match phrases like: "3,000 message charges free each month" or "up to 3,000 ... free each month"
+  const freeTierMatch =
+    page.match(/(\d{1,3}(?:,\d{3})*)\s*(?:message|messages|email|emails)\s*(?:charges\s*)?(?:free|included)[^\.]{0,120}?(?:per|each)\s*(?:month|mo)/i) ||
+    page.match(/up\s*to\s*(\d{1,3}(?:,\d{3})*)\s*(?:message|messages)\s*(?:charges\s*)?free[^\.]{0,120}?(?:per|each)\s*(?:month|mo)/i);
+
+  if (freeTierMatch) {
+    const monthly = parseInt(freeTierMatch[1].replace(/,/g, ''), 10);
+    const daily = Math.floor(monthly / 30);
+    return {
+      dailyLimit: daily,                // 3,000 ⇒ 100/day
+      monthlyLimit: monthly,            // 3,000
+      note: 'First 12 months'
+    };
+  }
+
+  // Optional: legacy EC2-only free allowance safeguard if ever present verbatim
+  const ec2Match = page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*per\s*month\s*free[^\.]{0,80}?Amazon\s*EC2/i);
+  if (ec2Match) {
+    const monthly = parseInt(ec2Match[1].replace(/,/g, ''), 10);
+    return {
+      dailyLimit: Math.floor(monthly / 30),
+      monthlyLimit: monthly,
+      note: 'EC2 context'
+    };
+  }
+
+  return null;
+}
+
+  
   // --- SendPulse ---
   if (name === 'SendPulse') {
     // Look for "Free" and a monthly number near it
@@ -284,7 +319,8 @@ async function scrapeAll() {
     { name: 'Resend', url: 'https://resend.com/pricing' },
     { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
     { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
-    { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' }
+    { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' },
+    { name: 'Amazon SES', url: 'https://aws.amazon.com/ses/pricing/' }
   ];
 
   const results = [];
