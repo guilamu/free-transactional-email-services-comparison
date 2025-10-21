@@ -1,0 +1,10 @@
+{
+  "name": "email-service-comparison",
+  "version": "1.0.0",
+  "description": "Automated comparison of free transactional email services",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer-core": "^21.0.0"
+  }
+}
