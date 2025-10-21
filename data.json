@@ -5,8 +5,9 @@
     "monthlyLimit": 12000,
     "url": "https://sendpulse.com/prices/smtp",
     "note": null,
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   },
   {
     "name": "Brevo (Sendinblue)",
@@ -14,26 +15,29 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastUpdate": "2025-10-21T13:59:52.171Z",
-    "scrapedSuccessfully": true
+    "lastScraped": "2025-10-21T14:51:57.680Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": null
   },
   {
     "name": "Mailjet",
+    "url": "https://www.mailjet.com/pricing/",
     "dailyLimit": 200,
     "monthlyLimit": 6000,
-    "url": "https://www.mailjet.com/pricing/",
     "note": null,
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:51:59.761Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": null
   },
   {
     "name": "Mailgun",
-    "dailyLimit": 167,
-    "monthlyLimit": 5000,
     "url": "https://www.mailgun.com/pricing/",
-    "note": "Trial period",
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "note": "Free plan - no credit card required",
+    "lastScraped": "2025-10-21T14:51:50.624Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": "2025-10-21T14:52:01.760Z"
   },
   {
     "name": "Resend",
@@ -41,8 +45,9 @@
     "monthlyLimit": 3000,
     "url": "https://resend.com/pricing",
     "note": null,
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   },
   {
     "name": "Elastic Email",
@@ -50,8 +55,9 @@
     "monthlyLimit": 3000,
     "url": "https://elasticemail.com/pricing",
     "note": null,
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   },
   {
     "name": "Amazon SES",
@@ -59,8 +65,9 @@
     "monthlyLimit": 3000,
     "url": "https://aws.amazon.com/ses/pricing/",
     "note": "First 12 months with AWS Free Tier",
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   },
   {
     "name": "SMTP2GO",
@@ -68,8 +75,9 @@
     "monthlyLimit": 1000,
     "url": "https://www.smtp2go.com/pricing/",
     "note": null,
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   },
   {
     "name": "Mailtrap",
@@ -77,8 +85,9 @@
     "monthlyLimit": 1000,
     "url": "https://mailtrap.io/pricing/",
     "note": "Email testing sandbox",
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   },
   {
     "name": "MailerSend",
@@ -86,8 +95,9 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": "Requires credit card",
-    "lastUpdate": "2025-10-21T13:59:47.704Z",
-    "scrapedSuccessfully": true
+    "lastScraped": "2025-10-21T14:51:53.238Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": null
   },
   {
     "name": "Mailchimp Transactional",
@@ -95,8 +105,9 @@
     "monthlyLimit": 500,
     "url": "https://mailchimp.com/pricing/transactional-email/",
     "note": "For Mailchimp users only",
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   },
   {
     "name": "Postmark",
@@ -104,7 +115,8 @@
     "monthlyLimit": 100,
     "url": "https://postmarkapp.com/pricing",
     "note": "Developer sandbox only",
-    "lastUpdate": "2025-10-21T13:59:54.171Z",
-    "scrapedSuccessfully": false
+    "lastScraped": "2025-10-21T14:52:01.760Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": null
   }
 ]
