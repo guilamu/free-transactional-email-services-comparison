@@ -5,7 +5,7 @@
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2025-10-21T16:11:05.663Z",
+    "lastScraped": "2025-10-21T16:20:03.386Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-10-21T16:11:15.358Z",
+    "lastScraped": "2025-10-21T16:20:12.903Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,9 +25,19 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2025-10-21T16:11:17.478Z",
+    "lastScraped": "2025-10-21T16:20:15.192Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
+  },
+  {
+    "name": "Mailtrap",
+    "url": "https://mailtrap.io/pricing/",
+    "dailyLimit": 150,
+    "monthlyLimit": 3500,
+    "note": "Email API/SMTP",
+    "lastScraped": "2025-10-21T16:20:22.418Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": "2025-10-21T16:20:24.418Z"
   },
   {
     "name": "Mailgun",
@@ -35,9 +45,19 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2025-10-21T16:11:07.757Z",
+    "lastScraped": "2025-10-21T16:20:05.608Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T14:52:01.760Z"
+  },
+  {
+    "name": "Amazon SES",
+    "url": "https://aws.amazon.com/ses/pricing/",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "note": "First 12 months",
+    "lastScraped": "2025-10-21T16:20:20.201Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": null
   },
   {
     "name": "Resend",
@@ -60,34 +80,14 @@
     "lastChanged": null
   },
   {
-    "name": "Amazon SES",
-    "dailyLimit": 100,
-    "monthlyLimit": 3000,
-    "url": "https://aws.amazon.com/ses/pricing/",
-    "note": "First 12 months with AWS Free Tier",
-    "lastScraped": "2025-10-21T14:52:01.760Z",
-    "scrapedSuccessfully": false,
-    "lastChanged": null
-  },
-  {
     "name": "SMTP2GO",
     "url": "https://www.smtp2go.com/pricing/",
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2025-10-21T16:11:19.902Z",
+    "lastScraped": "2025-10-21T16:20:17.896Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:04:57.538Z"
-  },
-  {
-    "name": "Mailtrap",
-    "dailyLimit": 33,
-    "monthlyLimit": 1000,
-    "url": "https://mailtrap.io/pricing/",
-    "note": "Email testing sandbox",
-    "lastScraped": "2025-10-21T14:52:01.760Z",
-    "scrapedSuccessfully": false,
-    "lastChanged": null
   },
   {
     "name": "MailerSend",
@@ -95,7 +95,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": "Requires credit card",
-    "lastScraped": "2025-10-21T16:11:10.973Z",
+    "lastScraped": "2025-10-21T16:20:08.297Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
