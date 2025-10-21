@@ -1,1 +1,106 @@
-[]
+[
+  {
+    "name": "SendPulse",
+    "dailyLimit": 400,
+    "monthlyLimit": 12000,
+    "url": "https://sendpulse.com/prices/smtp",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Brevo (Sendinblue)",
+    "dailyLimit": 300,
+    "monthlyLimit": 9000,
+    "url": "https://www.brevo.com/pricing/",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Mailjet",
+    "dailyLimit": 200,
+    "monthlyLimit": 6000,
+    "url": "https://www.mailjet.com/pricing/",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "SendGrid",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "url": "https://sendgrid.com/pricing/",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Mailgun",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "url": "https://www.mailgun.com/pricing/",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Amazon SES",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "url": "https://aws.amazon.com/ses/pricing/",
+    "note": "First 12 months only",
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "MailerSend",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "url": "https://www.mailersend.com/pricing",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Resend",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "url": "https://resend.com/pricing",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Elastic Email",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "url": "https://elasticemail.com/pricing",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Mailtrap",
+    "dailyLimit": 200,
+    "monthlyLimit": 1000,
+    "url": "https://mailtrap.io/pricing/",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "SMTP2GO",
+    "dailyLimit": 33,
+    "monthlyLimit": 1000,
+    "url": "https://www.smtp2go.com/pricing/",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Mailchimp Transactional",
+    "dailyLimit": 17,
+    "monthlyLimit": 500,
+    "url": "https://mailchimp.com/pricing/transactional-email/",
+    "note": null,
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  },
+  {
+    "name": "Postmark",
+    "dailyLimit": 3,
+    "monthlyLimit": 100,
+    "url": "https://postmarkapp.com/pricing",
+    "note": "Test mode only",
+    "lastUpdate": "2025-10-21T13:09:00.000Z"
+  }
+]
