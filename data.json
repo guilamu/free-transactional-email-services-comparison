@@ -1,12 +1,12 @@
 [
   {
     "name": "SendPulse",
+    "url": "https://sendpulse.com/prices/smtp",
     "dailyLimit": 400,
     "monthlyLimit": 12000,
-    "url": "https://sendpulse.com/prices/smtp",
     "note": null,
-    "lastScraped": "2025-10-21T14:52:01.760Z",
-    "scrapedSuccessfully": false,
+    "lastScraped": "2025-10-21T15:07:27.697Z",
+    "scrapedSuccessfully": true,
     "lastChanged": null
   },
   {
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-10-21T14:51:57.680Z",
+    "lastScraped": "2025-10-21T15:07:36.920Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +25,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2025-10-21T14:51:59.761Z",
+    "lastScraped": "2025-10-21T15:07:38.998Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +35,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2025-10-21T14:51:50.624Z",
+    "lastScraped": "2025-10-21T15:07:29.764Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T14:52:01.760Z"
   },
@@ -95,7 +95,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": "Requires credit card",
-    "lastScraped": "2025-10-21T14:51:53.238Z",
+    "lastScraped": "2025-10-21T15:07:32.489Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
