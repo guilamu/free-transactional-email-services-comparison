@@ -5,7 +5,7 @@
     "monthlyLimit": 12000,
     "url": "https://sendpulse.com/prices/smtp",
     "note": null,
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -14,7 +14,7 @@
     "monthlyLimit": 12000,
     "url": "https://www.mailersend.com/pricing",
     "note": null,
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -23,7 +23,7 @@
     "monthlyLimit": 9000,
     "url": "https://www.brevo.com/pricing/",
     "note": null,
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -32,7 +32,7 @@
     "monthlyLimit": 6000,
     "url": "https://www.mailjet.com/pricing/",
     "note": null,
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -41,7 +41,7 @@
     "monthlyLimit": 5000,
     "url": "https://www.mailgun.com/pricing/",
     "note": "Trial period",
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -50,7 +50,7 @@
     "monthlyLimit": 3000,
     "url": "https://resend.com/pricing",
     "note": null,
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -59,7 +59,7 @@
     "monthlyLimit": 3000,
     "url": "https://elasticemail.com/pricing",
     "note": null,
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -68,7 +68,7 @@
     "monthlyLimit": 3000,
     "url": "https://aws.amazon.com/ses/pricing/",
     "note": "First 12 months with AWS Free Tier",
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -77,7 +77,7 @@
     "monthlyLimit": 1000,
     "url": "https://www.smtp2go.com/pricing/",
     "note": null,
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -86,7 +86,7 @@
     "monthlyLimit": 1000,
     "url": "https://mailtrap.io/pricing/",
     "note": "Email testing sandbox",
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -95,7 +95,7 @@
     "monthlyLimit": 500,
     "url": "https://mailchimp.com/pricing/transactional-email/",
     "note": "For Mailchimp users only",
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   },
   {
@@ -104,7 +104,7 @@
     "monthlyLimit": 100,
     "url": "https://postmarkapp.com/pricing",
     "note": "Developer sandbox only",
-    "lastUpdate": "2025-10-21T13:39:55.689Z",
+    "lastUpdate": "2025-10-21T13:41:47.668Z",
     "scrapedSuccessfully": false
   }
 ]
