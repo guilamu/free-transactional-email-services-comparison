@@ -7,7 +7,7 @@ const fallbackData = [
   { name: 'SendPulse', dailyLimit: 400, monthlyLimit: 12000, url: 'https://sendpulse.com/prices/smtp', note: null },
   { name: 'Brevo (Sendinblue)', dailyLimit: 300, monthlyLimit: 9000, url: 'https://www.brevo.com/pricing/', note: null },
   { name: 'Mailjet', dailyLimit: 200, monthlyLimit: 6000, url: 'https://www.mailjet.com/pricing/', note: null },
-  { name: 'Mailgun', dailyLimit: 167, monthlyLimit: 5000, url: 'https://www.mailgun.com/pricing/', note: 'Trial period' },
+  { name: 'Mailgun', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.mailgun.com/pricing/', note: 'Free plan - no credit card required' },
   { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing', note: null },
   { name: 'Elastic Email', dailyLimit: 100, monthlyLimit: 3000, url: 'https://elasticemail.com/pricing', note: null },
   { name: 'Amazon SES', dailyLimit: 100, monthlyLimit: 3000, url: 'https://aws.amazon.com/ses/pricing/', note: 'First 12 months with AWS Free Tier' },
@@ -21,6 +21,33 @@ const fallbackData = [
 // Simple text extraction function (no HTML parsing needed for basic scraping)
 function extractFromText(text, name) {
   const lowerText = text.toLowerCase();
+  
+  // Mailgun specific
+  if (name === 'Mailgun') {
+    // Look for "100 emails per day" or variations
+    if (lowerText.includes('100') && (lowerText.includes('day') || lowerText.includes('daily'))) {
+      // Also check for free plan mentions
+      if (lowerText.includes('free') || lowerText.includes('trial')) {
+        return { 
+          dailyLimit: 100, 
+          monthlyLimit: 3000, // 100 * 30
+          note: 'Free plan - no credit card required' 
+        };
+      }
+    }
+    
+    // Look for specific free plan text
+    const dailyMatch = text.match(/free.*?(\d+)\s*(?:emails?)?\s*(?:per|\/)\s*day/i) ||
+                      text.match(/(\d+)\s*(?:emails?)?\s*(?:per|\/)\s*day.*?free/i);
+    if (dailyMatch) {
+      const daily = parseInt(dailyMatch[1]);
+      return {
+        dailyLimit: daily,
+        monthlyLimit: daily * 30,
+        note: 'Free plan - no credit card required'
+      };
+    }
+  }
   
   // MailerSend specific
   if (name === 'MailerSend') {
@@ -55,6 +82,19 @@ function extractFromText(text, name) {
     }
   }
   
+  // Mailjet specific
+  if (name === 'Mailjet') {
+    // Look for "200 emails/day" or "6000 emails/month"
+    const dailyMatch = text.match(/(\d+)\s+emails?\s*(?:per|\/)\s*day/i);
+    const monthMatch = text.match(/(\d+,?\d*)\s+emails?\s*(?:per|\/)\s*month/i);
+    
+    if (dailyMatch) {
+      const daily = parseInt(dailyMatch[1]);
+      const monthly = monthMatch ? parseInt(monthMatch[1].replace(',', '')) : daily * 30;
+      return { dailyLimit: daily, monthlyLimit: monthly, note: null };
+    }
+  }
+  
   return null;
 }
 
@@ -65,8 +105,9 @@ async function scrapeService(service) {
     
     const response = await fetch(service.url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'text/html',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
       },
       signal: AbortSignal.timeout(15000)
     });
@@ -86,8 +127,11 @@ async function scrapeService(service) {
     console.log(`   ✓ Found: ${data.dailyLimit}/day, ${data.monthlyLimit}/month`);
     
     return {
-      ...service,
-      ...data,
+      name: service.name,
+      url: service.url,
+      dailyLimit: data.dailyLimit,
+      monthlyLimit: data.monthlyLimit,
+      note: data.note,
       lastUpdate: new Date().toISOString(),
       scrapedSuccessfully: true
     };
@@ -101,9 +145,11 @@ async function scrapeAll() {
   console.log('═══════════════════════════════════════\n');
   
   const servicesToScrape = [
+    { name: 'Mailgun', url: 'https://www.mailgun.com/pricing/' },
     { name: 'MailerSend', url: 'https://www.mailersend.com/pricing' },
     { name: 'Resend', url: 'https://resend.com/pricing' },
-    { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' }
+    { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
+    { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' }
   ];
   
   const results = [];
@@ -115,13 +161,13 @@ async function scrapeAll() {
       results.push(data);
     }
     
-    // Polite delay
+    // Polite delay between requests
     await new Promise(resolve => setTimeout(resolve, 2000));
   }
   
   console.log('\n═══════════════════════════════════════\n');
   
-  // Add fallback data for all services (override with scraped data where available)
+  // Add fallback data for services not yet scraped
   const scrapedNames = results.map(r => r.name);
   const missingServices = fallbackData.filter(f => !scrapedNames.includes(f.name));
   
@@ -136,14 +182,16 @@ async function scrapeAll() {
     });
   });
   
-  // Sort by monthly limit
+  // Sort by monthly limit (descending)
   results.sort((a, b) => b.monthlyLimit - a.monthlyLimit);
   
   // Write to file
   fs.writeFileSync('data.json', JSON.stringify(results, null, 2));
   
   console.log(`✅ Processed ${results.length} services total`);
-  console.log('📄 data.json updated successfully\n');
+  console.log('   - Scraped automatically: ' + results.filter(r => r.scrapedSuccessfully).length);
+  console.log('   - Using fallback data: ' + results.filter(r => !r.scrapedSuccessfully).length);
+  console.log('\n📄 data.json updated successfully\n');
 }
 
 scrapeAll().catch(error => {
