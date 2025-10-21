@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-console.log('🚀 Starting email service scraper (using native fetch)...\n');
+console.log('🚀 Starting email service scraper with change tracking...\n');
 
 // Fallback data - accurate as of October 2025
 const fallbackData = [
@@ -18,46 +18,48 @@ const fallbackData = [
   { name: 'Postmark', dailyLimit: 3, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing', note: 'Developer sandbox only' }
 ];
 
-// Simple text extraction function (no HTML parsing needed for basic scraping)
+// Load previous data if exists
+function loadPreviousData() {
+  try {
+    if (fs.existsSync('data.json')) {
+      const content = fs.readFileSync('data.json', 'utf8');
+      return JSON.parse(content);
+    }
+  } catch (error) {
+    console.log('⚠️  Could not load previous data:', error.message);
+  }
+  return [];
+}
+
+// Simple text extraction function
 function extractFromText(text, name) {
   const lowerText = text.toLowerCase();
   
-// Mailgun specific
-if (name === 'Mailgun') {
-  // Only the free plan mentions "per day" - paid plans use "per month"
-  // So we just extract the number next to "emails per day"
-  const dailyMatch = text.match(/(\d+,?\d*)\s*emails?\s*(?:per|\/)\s*day/i);
-  
-  if (dailyMatch) {
-    const daily = parseInt(dailyMatch[1].replace(',', ''));
-    return { 
-      dailyLimit: daily, 
-      monthlyLimit: daily * 30,
-      note: 'Free plan - no credit card required' 
-    };
-  }
-  
-  // If no daily limit found, return null to use fallback
-  return null;
-}
+  // Mailgun specific - only free plan has "per day" limit
+  if (name === 'Mailgun') {
+    const dailyMatch = text.match(/(\d+,?\d*)\s*emails?\s*(?:per|\/)\s*day/i);
     
-    // Look for specific free plan text
-    const dailyMatch = text.match(/free.*?(\d+)\s*(?:emails?)?\s*(?:per|\/)\s*day/i) ||
-                      text.match(/(\d+)\s*(?:emails?)?\s*(?:per|\/)\s*day.*?free/i);
     if (dailyMatch) {
-      const daily = parseInt(dailyMatch[1]);
-      return {
-        dailyLimit: daily,
+      const daily = parseInt(dailyMatch[1].replace(',', ''));
+      return { 
+        dailyLimit: daily, 
         monthlyLimit: daily * 30,
-        note: 'Free plan - no credit card required'
+        note: 'Free plan - no credit card required' 
       };
     }
+    return null;
   }
   
   // MailerSend specific
   if (name === 'MailerSend') {
     if (lowerText.includes('500 emails per month') || lowerText.includes('500 emails/month')) {
       return { dailyLimit: 100, monthlyLimit: 500, note: 'Requires credit card' };
+    }
+    // Look for any "X emails per month" for free plan
+    const monthMatch = text.match(/free.*?(\d+)\s*emails?\s*(?:per|\/)\s*month/i);
+    if (monthMatch) {
+      const monthly = parseInt(monthMatch[1]);
+      return { dailyLimit: Math.floor(monthly / 30), monthlyLimit: monthly, note: 'Requires credit card' };
     }
   }
   
@@ -89,7 +91,6 @@ if (name === 'Mailgun') {
   
   // Mailjet specific
   if (name === 'Mailjet') {
-    // Look for "200 emails/day" or "6000 emails/month"
     const dailyMatch = text.match(/(\d+)\s+emails?\s*(?:per|\/)\s*day/i);
     const monthMatch = text.match(/(\d+,?\d*)\s+emails?\s*(?:per|\/)\s*month/i);
     
@@ -129,7 +130,7 @@ async function scrapeService(service) {
       return null;
     }
     
-    console.log(`   ✓ Found: ${data.dailyLimit}/day, ${data.monthlyLimit}/month`);
+    console.log(`   ✓ Scraped: ${data.dailyLimit}/day, ${data.monthlyLimit}/month`);
     
     return {
       name: service.name,
@@ -137,7 +138,7 @@ async function scrapeService(service) {
       dailyLimit: data.dailyLimit,
       monthlyLimit: data.monthlyLimit,
       note: data.note,
-      lastUpdate: new Date().toISOString(),
+      lastScraped: new Date().toISOString(),
       scrapedSuccessfully: true
     };
   } catch (error) {
@@ -148,6 +149,9 @@ async function scrapeService(service) {
 
 async function scrapeAll() {
   console.log('═══════════════════════════════════════\n');
+  
+  // Load previous data to track changes
+  const previousData = loadPreviousData();
   
   const servicesToScrape = [
     { name: 'Mailgun', url: 'https://www.mailgun.com/pricing/' },
@@ -172,7 +176,7 @@ async function scrapeAll() {
   
   console.log('\n═══════════════════════════════════════\n');
   
-  // Add fallback data for services not yet scraped
+  // Add fallback data for services not scraped
   const scrapedNames = results.map(r => r.name);
   const missingServices = fallbackData.filter(f => !scrapedNames.includes(f.name));
   
@@ -180,11 +184,38 @@ async function scrapeAll() {
   console.log(`✓ Using fallback data: ${missingServices.length} services\n`);
   
   missingServices.forEach(service => {
+    // Find previous data for this service
+    const previous = previousData.find(p => p.name === service.name);
+    
     results.push({
       ...service,
-      lastUpdate: new Date().toISOString(),
+      lastScraped: previous?.lastScraped || new Date().toISOString(),
       scrapedSuccessfully: false
     });
+  });
+  
+  // Check for changes and update lastChanged date
+  results.forEach(service => {
+    const previous = previousData.find(p => p.name === service.name);
+    
+    if (previous) {
+      // Check if values changed
+      const limitsChanged = previous.dailyLimit !== service.dailyLimit || 
+                           previous.monthlyLimit !== service.monthlyLimit;
+      
+      if (limitsChanged) {
+        console.log(`🔄 CHANGE DETECTED: ${service.name}`);
+        console.log(`   Old: ${previous.dailyLimit}/day, ${previous.monthlyLimit}/month`);
+        console.log(`   New: ${service.dailyLimit}/day, ${service.monthlyLimit}/month`);
+        service.lastChanged = new Date().toISOString();
+      } else {
+        // Keep previous lastChanged date
+        service.lastChanged = previous.lastChanged || null;
+      }
+    } else {
+      // New service - set lastChanged to now
+      service.lastChanged = new Date().toISOString();
+    }
   });
   
   // Sort by monthly limit (descending)
@@ -193,7 +224,7 @@ async function scrapeAll() {
   // Write to file
   fs.writeFileSync('data.json', JSON.stringify(results, null, 2));
   
-  console.log(`✅ Processed ${results.length} services total`);
+  console.log(`\n✅ Processed ${results.length} services total`);
   console.log('   - Scraped automatically: ' + results.filter(r => r.scrapedSuccessfully).length);
   console.log('   - Using fallback data: ' + results.filter(r => !r.scrapedSuccessfully).length);
   console.log('\n📄 data.json updated successfully\n');
@@ -202,11 +233,16 @@ async function scrapeAll() {
 scrapeAll().catch(error => {
   console.error('Fatal error:', error);
   // Use complete fallback on failure
-  const fallbackWithDates = fallbackData.map(f => ({
-    ...f,
-    lastUpdate: new Date().toISOString(),
-    scrapedSuccessfully: false
-  }));
+  const previousData = loadPreviousData();
+  const fallbackWithDates = fallbackData.map(f => {
+    const previous = previousData.find(p => p.name === f.name);
+    return {
+      ...f,
+      lastScraped: previous?.lastScraped || new Date().toISOString(),
+      lastChanged: previous?.lastChanged || null,
+      scrapedSuccessfully: false
+    };
+  });
   fallbackWithDates.sort((a, b) => b.monthlyLimit - a.monthlyLimit);
   fs.writeFileSync('data.json', JSON.stringify(fallbackWithDates, null, 2));
   console.log('⚠️  Using complete fallback data');
