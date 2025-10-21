@@ -97,21 +97,42 @@ if (name === 'Mailgun') {
   
 // Resend specific
 if (name === 'Resend') {
-  // Look for "Daily Limit" followed by a number (from table)
-  const dailyMatch = text.match(/Daily\s+Limit[^\d]*(\d+)/i) ||
-                     text.match(/(\d+)\s+emails?\s+(?:per|\/)\s*day/i);
+  // Strategy: Look for "Daily Limit" followed by any content, then find the first number
+  // This captures "Daily Limit|100" pattern from the table
+  const dailyMatch = text.match(/Daily\s*Limit[^\d]*?(\d+)/i);
   
-  // Look for "X emails / mo" at bottom of page
-  const monthMatch = text.match(/(\d+,?\d*)\s+emails?\s*\/\s*mo/i) ||
-                     text.match(/(\d+,?\d*)\s+emails?\s+(?:per|\/)\s*month/i);
+  // Look for "X,XXX emails / mo" or "X,XXX emails per month" at bottom
+  const monthMatch = text.match(/(\d+,\d+)\s+emails?\s*\/\s*mo/i) ||
+                     text.match(/(\d+,\d+)\s+emails?\s*per\s*month/i);
   
   if (dailyMatch && monthMatch) {
+    const daily = parseInt(dailyMatch[1]);
+    const monthly = parseInt(monthMatch[1].replace(',', ''));
+    
+    console.log(`   [DEBUG] Found Resend Free plan: ${daily}/day, ${monthly}/month`);
+    
     return {
-      dailyLimit: parseInt(dailyMatch[1]),
-      monthlyLimit: parseInt(monthMatch[1].replace(',', '')),
+      dailyLimit: daily,
+      monthlyLimit: monthly,
       note: null
     };
   }
+  
+  // If only monthly found (daily parsing failed), calculate daily
+  if (monthMatch) {
+    const monthly = parseInt(monthMatch[1].replace(',', ''));
+    console.log(`   [DEBUG] Only monthly found, calculating daily: ${monthly}/30`);
+    return {
+      dailyLimit: Math.floor(monthly / 30),
+      monthlyLimit: monthly,
+      note: null
+    };
+  }
+  
+  console.log(`   [DEBUG] Resend: No data found`);
+  return null;
+}
+
   
   // Fallback: if we find monthly but not daily, calculate daily
   if (monthMatch) {
