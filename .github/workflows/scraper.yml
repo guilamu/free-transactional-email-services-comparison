@@ -3,7 +3,7 @@ name: Daily Email Service Scraper
 on:
   schedule:
     - cron: '0 6 * * *'  # Daily at 6 AM UTC
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger
   push:
     branches: [main]
 
@@ -20,22 +20,18 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Install Chromium
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
-      
       - name: Install dependencies
         run: |
           npm init -y
-          npm install puppeteer cheerio axios
-        env:
-          PUPPETEER_SKIP_DOWNLOAD: 'true'
+          npm install cheerio axios
       
       - name: Run scraper
         run: node scraper.js
-        env:
-          PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+      
+      - name: Show data.json
+        run: |
+          echo "Generated data.json:"
+          cat data.json
       
       - name: Commit updated data
         run: |
