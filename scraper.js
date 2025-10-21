@@ -185,13 +185,15 @@ async function scrapeAll() {
   // Load previous data to track changes
   const previousData = loadPreviousData();
   
-  const servicesToScrape = [
-    { name: 'Mailgun', url: 'https://www.mailgun.com/pricing/' },
-    { name: 'MailerSend', url: 'https://www.mailersend.com/pricing' },
-    { name: 'Resend', url: 'https://resend.com/pricing' },
-    { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
-    { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' }
-  ];
+const servicesToScrape = [
+  { name: 'SendPulse', url: 'https://sendpulse.com/prices/smtp' },
+  { name: 'Mailgun', url: 'https://www.mailgun.com/pricing/' },
+  { name: 'MailerSend', url: 'https://www.mailersend.com/pricing' },
+  { name: 'Resend', url: 'https://resend.com/pricing' },
+  { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
+  { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' }
+];
+
   
   const results = [];
   
