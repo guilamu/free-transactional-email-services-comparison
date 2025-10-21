@@ -132,7 +132,6 @@ if (name === 'Resend') {
   console.log(`   [DEBUG] Resend: No data found`);
   return null;
 }
-
   
   // Fallback: if we find monthly but not daily, calculate daily
   if (monthMatch) {
