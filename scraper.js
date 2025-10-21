@@ -134,34 +134,34 @@ if (name === 'Resend') {
   
 // SMTP2GO specific
 if (name === 'SMTP2GO') {
-  // Only the free plan shows "X emails/day" - paid plans show prices
-  const dailyMatch = text.match(/(\d+)\s*emails?\s*[\/]?\s*day/i);
+  // Look for "1,000" or "1000" specifically followed by "emails/mo"
+  // The free plan shows this format with optional comma
+  const monthMatch = text.match(/(\d{1},?\d{3})\s*emails?\s*[\/]?\s*mo/i);
   
-  // Look for smallest "X emails/mo" (free tier has the lowest)
-  const monthMatches = text.match(/(\d+)\s*emails?\s*[\/]?\s*mo/gi);
-  
-  if (dailyMatch) {
-    const daily = parseInt(dailyMatch[1]);
+  if (monthMatch) {
+    // Remove comma and parse
+    const monthly = parseInt(monthMatch[1].replace(/,/g, ''));
     
-    // If we found month values, use the smallest one (free tier)
-    if (monthMatches && monthMatches.length > 0) {
-      const monthlyValues = monthMatches.map(m => {
-        const match = m.match(/(\d+)/);
-        return match ? parseInt(match[1]) : 0;
-      });
-      const monthly = Math.min(...monthlyValues);
-      
+    // SMTP2GO free plan is 1000 emails/month
+    // Only accept values close to 1000 to avoid capturing paid plans
+    if (monthly >= 900 && monthly <= 1100) {
       return {
-        dailyLimit: daily,
+        dailyLimit: Math.floor(monthly / 30),
         monthlyLimit: monthly,
         note: null
       };
     }
-    
-    // If only daily found, calculate monthly
+  }
+  
+  // Alternative: Search for the Free Plan section specifically
+  const freePlanPattern = /Free\s+Plan[^]*?(\d{1},?\d{3})\s*emails?\s*[\/]?\s*mo/i;
+  const freePlanMatch = text.match(freePlanPattern);
+  
+  if (freePlanMatch) {
+    const monthly = parseInt(freePlanMatch[1].replace(/,/g, ''));
     return {
-      dailyLimit: daily,
-      monthlyLimit: daily * 30,
+      dailyLimit: Math.floor(monthly / 30),
+      monthlyLimit: monthly,
       note: null
     };
   }
