@@ -2,8 +2,8 @@ name: Daily Email Service Scraper
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Daily at 6 AM UTC
-  workflow_dispatch:  # Manual trigger
+    - cron: '0 6 * * *'
+  workflow_dispatch:
   push:
     branches: [main]
 
@@ -20,15 +20,10 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Install dependencies
-        run: |
-          npm init -y
-          npm install cheerio axios
-      
       - name: Run scraper
         run: node scraper.js
       
-      - name: Show data.json
+      - name: Show generated data
         run: |
           echo "Generated data.json:"
           cat data.json
