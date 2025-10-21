@@ -22,19 +22,24 @@ const fallbackData = [
 function extractFromText(text, name) {
   const lowerText = text.toLowerCase();
   
-  // Mailgun specific
-  if (name === 'Mailgun') {
-    // Look for "100 emails per day" or variations
-    if (lowerText.includes('100') && (lowerText.includes('day') || lowerText.includes('daily'))) {
-      // Also check for free plan mentions
-      if (lowerText.includes('free') || lowerText.includes('trial')) {
-        return { 
-          dailyLimit: 100, 
-          monthlyLimit: 3000, // 100 * 30
-          note: 'Free plan - no credit card required' 
-        };
-      }
-    }
+// Mailgun specific
+if (name === 'Mailgun') {
+  // Only the free plan mentions "per day" - paid plans use "per month"
+  // So we just extract the number next to "emails per day"
+  const dailyMatch = text.match(/(\d+,?\d*)\s*emails?\s*(?:per|\/)\s*day/i);
+  
+  if (dailyMatch) {
+    const daily = parseInt(dailyMatch[1].replace(',', ''));
+    return { 
+      dailyLimit: daily, 
+      monthlyLimit: daily * 30,
+      note: 'Free plan - no credit card required' 
+    };
+  }
+  
+  // If no daily limit found, return null to use fallback
+  return null;
+}
     
     // Look for specific free plan text
     const dailyMatch = text.match(/free.*?(\d+)\s*(?:emails?)?\s*(?:per|\/)\s*day/i) ||
