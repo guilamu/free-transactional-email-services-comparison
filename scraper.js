@@ -252,7 +252,7 @@ const servicesToScrape = [
   { name: 'MailerSend', url: 'https://www.mailersend.com/pricing' },
   { name: 'Resend', url: 'https://resend.com/pricing' },
   { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
-  { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' }
+  { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
   { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' } 
 ];
 
