@@ -132,6 +132,43 @@ if (name === 'Resend') {
   return null;
 }
   
+// SMTP2GO specific
+if (name === 'SMTP2GO') {
+  // Only the free plan shows "X emails/day" - paid plans show prices
+  const dailyMatch = text.match(/(\d+)\s*emails?\s*[\/]?\s*day/i);
+  
+  // Look for smallest "X emails/mo" (free tier has the lowest)
+  const monthMatches = text.match(/(\d+)\s*emails?\s*[\/]?\s*mo/gi);
+  
+  if (dailyMatch) {
+    const daily = parseInt(dailyMatch[1]);
+    
+    // If we found month values, use the smallest one (free tier)
+    if (monthMatches && monthMatches.length > 0) {
+      const monthlyValues = monthMatches.map(m => {
+        const match = m.match(/(\d+)/);
+        return match ? parseInt(match[1]) : 0;
+      });
+      const monthly = Math.min(...monthlyValues);
+      
+      return {
+        dailyLimit: daily,
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
+    
+    // If only daily found, calculate monthly
+    return {
+      dailyLimit: daily,
+      monthlyLimit: daily * 30,
+      note: null
+    };
+  }
+  
+  return null;
+}
+  
   // Brevo specific
   if (name === 'Brevo (Sendinblue)') {
     const dailyMatch = text.match(/(\d+)\s+emails?\s+per\s+day/i);
@@ -216,6 +253,7 @@ const servicesToScrape = [
   { name: 'Resend', url: 'https://resend.com/pricing' },
   { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
   { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' }
+  { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' } 
 ];
 
   
