@@ -35,20 +35,32 @@ function loadPreviousData() {
 function extractFromText(text, name) {
   const lowerText = text.toLowerCase();
   
-  // Mailgun specific - only free plan has "per day" limit
-  if (name === 'Mailgun') {
-    const dailyMatch = text.match(/(\d+,?\d*)\s*emails?\s*(?:per|\/)\s*day/i);
-    
-    if (dailyMatch) {
-      const daily = parseInt(dailyMatch[1].replace(',', ''));
-      return { 
-        dailyLimit: daily, 
-        monthlyLimit: daily * 30,
-        note: 'Free plan - no credit card required' 
-      };
-    }
-    return null;
+// Mailgun specific - only free plan has "per day" limit
+if (name === 'Mailgun') {
+  // Debug: log what we're searching
+  const lowerText = text.toLowerCase();
+  const hasDay = lowerText.includes('day');
+  const hasFree = lowerText.includes('free');
+  
+  console.log(`   [DEBUG] Text contains 'day': ${hasDay}, 'free': ${hasFree}`);
+  
+  const dailyMatch = text.match(/(\d+,?\d*)\s*emails?\s*(?:per|\/)\s*day/i);
+  
+  if (dailyMatch) {
+    console.log(`   [DEBUG] Found match: "${dailyMatch[0]}" = ${dailyMatch[1]} emails/day`);
+    const daily = parseInt(dailyMatch[1].replace(',', ''));
+    return { 
+      dailyLimit: daily, 
+      monthlyLimit: daily * 30,
+      note: 'Free plan - no credit card required' 
+    };
+  } else {
+    console.log(`   [DEBUG] No daily limit pattern found in page text`);
   }
+  
+  return null;
+}
+
   
   // MailerSend specific
   if (name === 'MailerSend') {
