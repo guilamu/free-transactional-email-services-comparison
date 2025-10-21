@@ -133,17 +133,6 @@ if (name === 'Resend') {
   return null;
 }
   
-  // Fallback: if we find monthly but not daily, calculate daily
-  if (monthMatch) {
-    const monthly = parseInt(monthMatch[1].replace(',', ''));
-    return {
-      dailyLimit: Math.floor(monthly / 30),
-      monthlyLimit: monthly,
-      note: null
-    };
-  }
-}
-  
   // Brevo specific
   if (name === 'Brevo (Sendinblue)') {
     const dailyMatch = text.match(/(\d+)\s+emails?\s+per\s+day/i);
