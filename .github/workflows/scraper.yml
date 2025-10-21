@@ -21,12 +21,12 @@ jobs:
           node-version: '18'
       
       - name: Install dependencies
-        run: npm install puppeteer-core cheerio axios chromium
+        run: |
+          npm init -y
+          npm install axios cheerio puppeteer-core
       
       - name: Run scraper
         run: node scraper.js
-        env:
-          PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
       
       - name: Commit updated data
         run: |
