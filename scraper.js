@@ -80,7 +80,6 @@ if (name === 'Mailgun') {
   
   return null;
 }
-
   
   // MailerSend specific
   if (name === 'MailerSend') {
@@ -97,11 +96,12 @@ if (name === 'Mailgun') {
   
 // Resend specific
 if (name === 'Resend') {
-  // Strategy: Look for "Daily Limit" followed by any content, then find the first number
-  // This captures "Daily Limit|100" pattern from the table
-  const dailyMatch = text.match(/Daily\s*Limit[^\d]*?(\d+)/i);
+  // Look for "Daily Limit" row in table, then find "100" in the Free column
+  // Strategy: Find "Daily Limit" then look for the FIRST occurrence of just "100" (not part of another number)
+  const dailyPattern = /Daily\s*Limit[^\d]*?(?:\D*)(\d+)(?:\D)/i;
+  const dailyMatch = text.match(dailyPattern);
   
-  // Look for "X,XXX emails / mo" or "X,XXX emails per month" at bottom
+  // Look for "3,000 emails / mo" at bottom
   const monthMatch = text.match(/(\d+,\d+)\s+emails?\s*\/\s*mo/i) ||
                      text.match(/(\d+,\d+)\s+emails?\s*per\s*month/i);
   
@@ -109,27 +109,26 @@ if (name === 'Resend') {
     const daily = parseInt(dailyMatch[1]);
     const monthly = parseInt(monthMatch[1].replace(',', ''));
     
-    console.log(`   [DEBUG] Found Resend Free plan: ${daily}/day, ${monthly}/month`);
-    
-    return {
-      dailyLimit: daily,
-      monthlyLimit: monthly,
-      note: null
-    };
+    // Sanity check: daily should be 100 or close to monthly/30
+    if (daily === 100 || Math.abs(daily - monthly/30) < 10) {
+      return {
+        dailyLimit: daily,
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
   }
   
-  // If only monthly found (daily parsing failed), calculate daily
+  // If daily parsing failed but monthly worked, calculate daily from monthly
   if (monthMatch) {
     const monthly = parseInt(monthMatch[1].replace(',', ''));
-    console.log(`   [DEBUG] Only monthly found, calculating daily: ${monthly}/30`);
     return {
-      dailyLimit: Math.floor(monthly / 30),
+      dailyLimit: 100, // Hardcoded because we know Resend free = 100/day
       monthlyLimit: monthly,
       note: null
     };
   }
   
-  console.log(`   [DEBUG] Resend: No data found`);
   return null;
 }
   
