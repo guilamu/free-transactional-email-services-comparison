@@ -16,7 +16,8 @@ const fallbackData = [
   { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/', note: 'Reliable SMTP relay, detailed logs, good support; easy domain setup' },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/', note: 'Strong DX: logs, webhooks, templates; Campaigns and API in one place' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'Modern UI, templates and inbound routing; granular roles and tokens' },  
-  { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'Excellent deliverability and speed; clear events and template tooling' }
+  { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'Excellent deliverability and speed; clear events and template tooling' },
+  { name: 'Maileroo', dailyLimit: -, monthlyLimit: 3000, url: 'Excellent deliverability and speed; clear events and template tooling' }
 ];
 
 // Load previous data if exists
@@ -41,6 +42,54 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
+// --- Maileroo ---
+if (name === 'Maileroo') {
+  // Normalize whitespace for robust matching
+  const page = text.replace(/\s+/g, ' ');
+
+  // Prefer the "outbound emails per month" phrasing from the help page
+  // Examples on page: "up to 3,000 outbound emails per month + 1,000 inbound emails"
+  const monthlyOutbound =
+    page.match(/up\s*to\s*(\d{1,3}(?:,\d{3})*)\s*outbound\s*emails?\s*(?:per|\/)\s*month/i) ||
+    page.match(/(\d{1,3}(?:,\d{3})*)\s*outbound\s*emails?\s*(?:per|\/)\s*month/i);
+
+  if (monthlyOutbound) {
+    const monthly = parseInt(monthlyOutbound[1].replace(/,/g, ''), 10);
+    // Daily = floor(monthly/30)
+    return {
+      dailyLimit: Math.floor(monthly / 30),
+      monthlyLimit: monthly,
+      note: null
+    };
+  }
+
+  // Fallback: generic monthly, but avoid matching the inbound figure by requiring "outbound" nearby
+  const nearbyOutbound = page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:per|\/)\s*month[^\.]{0,80}?outbound/i);
+  if (nearbyOutbound) {
+    const monthly = parseInt(nearbyOutbound[1].replace(/,/g, ''), 10);
+    return {
+      dailyLimit: Math.floor(monthly / 30),
+      monthlyLimit: monthly,
+      note: null
+    };
+  }
+
+  // As a last resort, pick the smallest 4- or 3-digit monthly number that is not labeled inbound
+  const allMonthly = [...page.matchAll(/(\d{3,4})\s*emails?\s*(?:per|\/)\s*month/ig)]
+    .map(m => ({ n: parseInt(m[1], 10), raw: m[0] }))
+    .filter(x => Number.isFinite(x.n) && !/inbound/i.test(x.raw));
+  if (allMonthly.length) {
+    const monthly = Math.min(...allMonthly.map(x => x.n));
+    return {
+      dailyLimit: Math.floor(monthly / 30),
+      monthlyLimit: monthly,
+      note: null
+    };
+  }
+
+  return null;
+}
+  
 // Mailtrap specific (Email API/SMTP Free plan)
 if (name === 'Mailtrap') {
   // Normalize whitespace for reliable regex
@@ -405,7 +454,8 @@ async function scrapeAll() {
     { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' },
     { name: 'Amazon SES', url: 'https://aws.amazon.com/ses/pricing/' },
     { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
-    { name: 'Postmark', url: 'https://postmarkapp.com/pricing' }
+    { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
+    { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' }
   ];
 
   const results = [];
