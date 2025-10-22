@@ -16,7 +16,7 @@ const fallbackData = [
   { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/', note: null },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/', note: 'Email testing sandbox' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing', note: 'Requires credit card' },  
-  { name: 'Postmark', dailyLimit: 3, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing', note: 'Developer sandbox only' }
+  { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing', note: 'Developer sandbox only' }
 ];
 
 // Load previous data if exists
@@ -67,6 +67,39 @@ if (name === 'Mailtrap') {
       dailyLimit: daily,              // 150
       monthlyLimit: monthly,          // 3,500
       note: 'Email API/SMTP'
+    };
+  }
+
+  return null;
+}
+
+  // --- Postmark ---
+if (name === 'Postmark') {
+  // Normaliser pour des regex robustes
+  const page = text.replace(/\s+/g, ' ');
+
+  // 1) Motif principal trouvé sur la page Pricing/FAQ
+  //    "100 emails per month" / "100 emails a month"
+  const m = page.match(/\b(\d{1,3}(?:,\d{3})?)\s*emails?\s*(?:per|a)\s*month\b/i);
+
+  if (m) {
+    const monthly = parseInt(m[1].replace(/,/g, ''), 10);
+    // Spécificité Postmark demandée: daily = monthly
+    return {
+      dailyLimit: monthly,          // 100
+      monthlyLimit: monthly,        // 100
+      note: 'Free Developer plan'
+    };
+  }
+
+  // 2) Filet de sécurité: ancrage sur "Developer" -> "100 emails per month"
+  const dev = page.match(/Developer[^]{0,200}?(\d{1,3}(?:,\d{3})?)\s*emails?\s*(?:per|a)\s*month/i);
+  if (dev) {
+    const monthly = parseInt(dev[1].replace(/,/g, ''), 10);
+    return {
+      dailyLimit: monthly,
+      monthlyLimit: monthly,
+      note: 'Free Developer plan'
     };
   }
 
@@ -371,7 +404,8 @@ async function scrapeAll() {
     { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
     { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' },
     { name: 'Amazon SES', url: 'https://aws.amazon.com/ses/pricing/' },
-    { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' }
+    { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
+    { name: 'Postmark', url: 'https://postmarkapp.com/pricing' }
   ];
 
   const results = [];
