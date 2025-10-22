@@ -1,21 +1,11 @@
 [
   {
-    "name": "Postmark",
-    "url": "https://postmarkapp.com/pricing",
-    "dailyLimit": 300000,
-    "monthlyLimit": 300000,
-    "note": "Free Developer plan",
-    "lastScraped": "2025-10-22T06:21:05.965Z",
-    "scrapedSuccessfully": true,
-    "lastChanged": "2025-10-22T06:21:07.964Z"
-  },
-  {
     "name": "SendPulse",
     "url": "https://sendpulse.com/prices/smtp",
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2025-10-22T06:20:45.261Z",
+    "lastScraped": "2025-10-22T06:23:51.844Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-10-22T06:20:54.421Z",
+    "lastScraped": "2025-10-22T06:24:01.083Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +25,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2025-10-22T06:20:56.480Z",
+    "lastScraped": "2025-10-22T06:24:03.153Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -45,7 +35,7 @@
     "dailyLimit": 150,
     "monthlyLimit": 3500,
     "note": "Email API/SMTP",
-    "lastScraped": "2025-10-22T06:21:03.062Z",
+    "lastScraped": "2025-10-22T06:24:09.663Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:20:24.418Z"
   },
@@ -55,7 +45,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2025-10-22T06:20:47.518Z",
+    "lastScraped": "2025-10-22T06:23:54.096Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T14:52:01.760Z"
   },
@@ -65,7 +55,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-10-22T06:20:52.330Z",
+    "lastScraped": "2025-10-22T06:23:58.992Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T15:31:38.077Z"
   },
@@ -75,7 +65,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "First 12 months",
-    "lastScraped": "2025-10-22T06:21:00.888Z",
+    "lastScraped": "2025-10-22T06:24:07.596Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -85,7 +75,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2025-10-22T06:20:58.678Z",
+    "lastScraped": "2025-10-22T06:24:05.436Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:04:57.538Z"
   },
@@ -95,8 +85,18 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": "Requires credit card",
-    "lastScraped": "2025-10-22T06:20:49.991Z",
+    "lastScraped": "2025-10-22T06:23:56.660Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
+  },
+  {
+    "name": "Postmark",
+    "url": "https://postmarkapp.com/pricing",
+    "dailyLimit": 100,
+    "monthlyLimit": 100,
+    "note": "Free Developer plan",
+    "lastScraped": "2025-10-22T06:24:12.444Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": "2025-10-22T06:24:14.445Z"
   }
 ]
