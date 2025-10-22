@@ -468,8 +468,8 @@ async function scrapeAll() {
   // Write to file
   fs.writeFileSync('data.json', JSON.stringify(results, null, 2));
   console.log(`\n✅ Processed ${results.length} services total`);
-  console.log(' - Scraped automatically: ' + results.filter(r => r.scrapedSuccessfully).length);
-  console.log(' - Using fallback data: ' + results.filter(r => !r.scrapedSuccessfully).length);
+  console.log(' - Scraped automatically daily: ' + results.filter(r => r.scrapedSuccessfully).length);
+  console.log(' - Using hardcoded fallback data: ' + results.filter(r => !r.scrapedSuccessfully).length);
   console.log('\n📄 data.json updated successfully\n');
 }
 
