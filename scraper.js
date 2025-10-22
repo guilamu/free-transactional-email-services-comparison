@@ -73,38 +73,38 @@ if (name === 'Mailtrap') {
   return null;
 }
 
-  // --- Postmark ---
+// --- Postmark ---
 if (name === 'Postmark') {
-  // Normaliser pour des regex robustes
-  const page = text.replace(/\s+/g, ' ');
+  const page = text.replace(/\s+/g, ' '); // robustifier les regex
+  // 1) Ancrage explicite sur le palier gratuit
+  const anchored =
+    page.match(/free\s+developer\s+(?:plan|tier)[^]{0,200}?(\d{1,3})(?:\s*emails?)?\s*(?:per|a)\s*month/i);
+  // 2) Motif direct "100 emails per month"
+  const direct = page.match(/\b(100)\s*emails?\s*(?:per|a)\s*month\b/i);
 
-  // 1) Motif principal trouvé sur la page Pricing/FAQ
-  //    "100 emails per month" / "100 emails a month"
-  const m = page.match(/\b(\d{1,3}(?:,\d{3})?)\s*emails?\s*(?:per|a)\s*month\b/i);
+  let monthly = null;
+  if (anchored) monthly = parseInt(anchored[1], 10);
+  else if (direct) monthly = parseInt(direct[1], 10);
 
-  if (m) {
-    const monthly = parseInt(m[1].replace(/,/g, ''), 10);
-    // Spécificité Postmark demandée: daily = monthly
-    return {
-      dailyLimit: monthly,          // 100
-      monthlyLimit: monthly,        // 100
-      note: 'Free Developer plan'
-    };
+  // 3) Garde-fou: ignorer des gros volumes payants
+  if (!monthly) {
+    const loose = page.match(/\b(\d{1,3}(?:,\d{3})?)\s*emails?\s*(?:per|a)\s*month\b/i);
+    if (loose) {
+      const n = parseInt(loose[1].replace(/,/g, ''), 10);
+      if (n > 0 && n <= 1000) monthly = n; // n=100 attendu pour Postmark
+    }
   }
 
-  // 2) Filet de sécurité: ancrage sur "Developer" -> "100 emails per month"
-  const dev = page.match(/Developer[^]{0,200}?(\d{1,3}(?:,\d{3})?)\s*emails?\s*(?:per|a)\s*month/i);
-  if (dev) {
-    const monthly = parseInt(dev[1].replace(/,/g, ''), 10);
+  if (monthly && monthly > 0) {
     return {
-      dailyLimit: monthly,
+      dailyLimit: monthly,           // consigne: daily = monthly pour Postmark
       monthlyLimit: monthly,
       note: 'Free Developer plan'
     };
   }
-
   return null;
 }
+
 
   
   // Amazon SES specific
