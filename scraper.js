@@ -7,16 +7,16 @@ console.log('🚀 Starting email service scraper with change tracking...\n');
 
 // Fallback data - accurate as of October 2025
 const fallbackData = [
-  { name: 'SendPulse', dailyLimit: 400, monthlyLimit: 12000, url: 'https://sendpulse.com/prices/smtp', note: 'SMTP+API with automations and SMS; simple UI; multilingual support' },
-  { name: 'Brevo (Sendinblue)', dailyLimit: 300, monthlyLimit: 9000, url: 'https://www.brevo.com/pricing/', note: 'Marketing suite with CRM/automation; EU data hosting options' },
-  { name: 'Mailjet', dailyLimit: 200, monthlyLimit: 6000, url: 'https://www.mailjet.com/pricing/', note: 'Team collaboration on templates; solid APIs; EU data centers' },
-  { name: 'Mailgun', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.mailgun.com/pricing/', note: 'Dev-centric API, routes/webhooks; validation and deliverability tools' },
-  { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing', note: 'Clean APIs, official SDKs, React Email; pristine shared IPs; fast onboarding' },
-  { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/', note: 'Reliable SMTP relay, detailed logs, good support; easy domain setup' },
-  { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/', note: 'Strong DX: logs, webhooks, templates; Campaigns and API in one place' },
-  { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'Modern UI, templates and inbound routing; granular roles and tokens' },  
-  { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'Excellent deliverability and speed; clear events and template tooling' },
-  { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'Excellent deliverability and speed; clear events and template tooling' }
+  { name: 'SendPulse', dailyLimit: 400, monthlyLimit: 12000, url: 'https://sendpulse.com/prices/smtp' },
+  { name: 'Brevo (Sendinblue)', dailyLimit: 300, monthlyLimit: 9000, url: 'https://www.brevo.com/pricing/' },
+  { name: 'Mailjet', dailyLimit: 200, monthlyLimit: 6000, url: 'https://www.mailjet.com/pricing/' },
+  { name: 'Mailgun', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.mailgun.com/pricing/' },
+  { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing' },
+  { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/' },
+  { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/' },
+  { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing' },  
+  { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing' },
+  { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' }
 ];
 
 // Load previous data if exists
