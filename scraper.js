@@ -154,30 +154,49 @@ if (name === 'Amazon SES') {
     return null;
   }
 
-  // --- Resend ---
-  if (name === 'Resend') {
-    // Try to locate the free daily limit and monthly number
-    const dailyPattern = /Daily\s*Limit[^]*?(\b\d{1,3}\b)/i;
-    const dailyMatch = text.match(dailyPattern);
-    const monthMatch =
-      text.match(/(\d{1,3}(?:,\d{3})*)\s+emails?\s*\/\s*mo\b/i) ||
-      text.match(/(\d{1,3}(?:,\d{3})*)\s+emails?\s*per\s*month\b/i);
-    if (dailyMatch && monthMatch) {
-      const daily = parseInt(dailyMatch[1].replace(/,/g, ''), 10);
-      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
-      if (daily > 0 && monthly > 0) {
-        if (daily === 100 || Math.abs(daily - monthly / 30) < 10) {
-          return { dailyLimit: daily, monthlyLimit: monthly, note: null };
-        }
-      }
-    } else if (monthMatch) {
-      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
-      if (monthly > 0) {
-        return { dailyLimit: 100, monthlyLimit: monthly, note: null };
-      }
+// --- Resend ---
+if (name === 'Resend') {
+  // Normaliser les espaces pour fiabiliser les regex
+  const page = text.replace(/\s+/g, ' ');
+
+  // 1) Mensuel: ancrer sur "Free" puis capter "X,XXX emails / mo" ou "per month"
+  const freeMonthlyMatch =
+    page.match(/Free[^]{0,300}?(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:\/\s*mo|\/\s*month|per\s*(?:month|mo))\b/i);
+
+  // 2) Quotidien: ligne "Daily Limit" => premier nombre qui suit (colonne Free)
+  const dailyMatch =
+    page.match(/Daily\s*Limit[^0-9]{0,50}(\d{2,3})\b/i);
+
+  if (dailyMatch && freeMonthlyMatch) {
+    const daily = parseInt(dailyMatch[1], 10);
+    const monthly = parseInt(freeMonthlyMatch[1].replace(/,/g, ''), 10);
+    if (daily > 0 && monthly > 0) {
+      return { dailyLimit: daily, monthlyLimit: monthly, note: null };
     }
-    return null;
   }
+
+  // 3) Secours: si le quotidien manque, calculer 100 = 3000/30 quand le mensuel est trouvé
+  if (freeMonthlyMatch) {
+    const monthly = parseInt(freeMonthlyMatch[1].replace(/,/g, ''), 10);
+    if (monthly > 0) {
+      return { dailyLimit: Math.floor(monthly / 30), monthlyLimit: monthly, note: null };
+    }
+  }
+
+  // 4) Secours large: accepter "X,XXX emails / mo" sans ancrage Free et choisir la plus petite valeur raisonnable
+  const allMonthly = [...page.matchAll(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:\/\s*mo|\/\s*month|per\s*(?:month|mo))\b/ig)]
+    .map(m => parseInt(m[1].replace(/,/g, ''), 10))
+    .filter(n => Number.isFinite(n));
+  if (allMonthly.length) {
+    const monthly = Math.min(...allMonthly);
+    if (monthly > 0 && monthly <= 5000) {
+      return { dailyLimit: Math.floor(monthly / 30), monthlyLimit: monthly, note: null };
+    }
+  }
+
+  return null;
+}
+
 
   // --- SMTP2GO (FIXED) ---
   if (name === 'SMTP2GO') {
