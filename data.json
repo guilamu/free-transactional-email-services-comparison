@@ -5,7 +5,7 @@
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2025-10-21T16:20:03.386Z",
+    "lastScraped": "2025-10-22T06:12:45.814Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-10-21T16:20:12.903Z",
+    "lastScraped": "2025-10-22T06:12:55.911Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +25,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2025-10-21T16:20:15.192Z",
+    "lastScraped": "2025-10-22T06:12:58.081Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +35,7 @@
     "dailyLimit": 150,
     "monthlyLimit": 3500,
     "note": "Email API/SMTP",
-    "lastScraped": "2025-10-21T16:20:22.418Z",
+    "lastScraped": "2025-10-22T06:13:04.548Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:20:24.418Z"
   },
@@ -45,9 +45,19 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2025-10-21T16:20:05.608Z",
+    "lastScraped": "2025-10-22T06:12:48.133Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T14:52:01.760Z"
+  },
+  {
+    "name": "Resend",
+    "url": "https://resend.com/pricing",
+    "dailyLimit": 100,
+    "monthlyLimit": 3000,
+    "note": null,
+    "lastScraped": "2025-10-22T06:12:53.054Z",
+    "scrapedSuccessfully": true,
+    "lastChanged": "2025-10-21T15:31:38.077Z"
   },
   {
     "name": "Amazon SES",
@@ -55,19 +65,9 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "First 12 months",
-    "lastScraped": "2025-10-21T16:20:20.201Z",
+    "lastScraped": "2025-10-22T06:13:02.399Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
-  },
-  {
-    "name": "Resend",
-    "dailyLimit": 100,
-    "monthlyLimit": 3000,
-    "url": "https://resend.com/pricing",
-    "note": null,
-    "lastScraped": "2025-10-21T15:51:49.322Z",
-    "scrapedSuccessfully": false,
-    "lastChanged": "2025-10-21T15:31:38.077Z"
   },
   {
     "name": "Elastic Email",
@@ -85,7 +85,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2025-10-21T16:20:17.896Z",
+    "lastScraped": "2025-10-22T06:13:00.281Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:04:57.538Z"
   },
@@ -95,7 +95,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": "Requires credit card",
-    "lastScraped": "2025-10-21T16:20:08.297Z",
+    "lastScraped": "2025-10-22T06:12:50.677Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
