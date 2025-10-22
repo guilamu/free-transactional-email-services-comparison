@@ -12,7 +12,6 @@ const fallbackData = [
   { name: 'Mailjet', dailyLimit: 200, monthlyLimit: 6000, url: 'https://www.mailjet.com/pricing/', note: 'Team collaboration on templates; solid APIs; EU data centers' },
   { name: 'Mailgun', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.mailgun.com/pricing/', note: 'Dev-centric API, routes/webhooks; validation and deliverability tools' },
   { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing', note: 'Clean APIs, official SDKs, React Email; pristine shared IPs; fast onboarding' },
-  { name: 'Amazon SES', dailyLimit: 100, monthlyLimit: 3000, url: 'https://aws.amazon.com/ses/pricing/', note: 'Massive scale; best with AWS stack; needs DNS/auth setup and warmup' },
   { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/', note: 'Reliable SMTP relay, detailed logs, good support; easy domain setup' },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/', note: 'Strong DX: logs, webhooks, templates; Campaigns and API in one place' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'Modern UI, templates and inbound routing; granular roles and tokens' },  
@@ -452,7 +451,6 @@ async function scrapeAll() {
     { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
     { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
     { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' },
-    { name: 'Amazon SES', url: 'https://aws.amazon.com/ses/pricing/' },
     { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' }
