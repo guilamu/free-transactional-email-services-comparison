@@ -17,7 +17,7 @@ const fallbackData = [
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/', note: 'Strong DX: logs, webhooks, templates; Campaigns and API in one place' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'Modern UI, templates and inbound routing; granular roles and tokens' },  
   { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'Excellent deliverability and speed; clear events and template tooling' },
-  { name: 'Maileroo', dailyLimit: -, monthlyLimit: 3000, url: 'Excellent deliverability and speed; clear events and template tooling' }
+  { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'Excellent deliverability and speed; clear events and template tooling' }
 ];
 
 // Load previous data if exists
