@@ -19,12 +19,14 @@
     }
     
     .container {
-      max-width: 1200px;
       margin: 0 auto;
       background: white;
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
       overflow: hidden;
+      margin-inline: auto;
+      padding-inline: 16px;
+      max-width: clamp(320px, 96vw, 1200px);
     }
     
     header {
@@ -54,12 +56,14 @@
     
     .table-container {
       overflow-x: auto;
-      padding: 30px;
+      -webkit-overflow-scrolling: touch;
+      padding: 30px;      
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
+      table-layout: auto; 
     }
     
     th, td {
@@ -157,7 +161,7 @@
       
       th, td {
         padding: 8px 6px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
       }
       
       .table-container {
