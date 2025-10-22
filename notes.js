@@ -6,7 +6,7 @@ const providerNotes = {
   "Mailgun": "Dev‑centric API, routes/webhooks; validation & deliverability tools.",
   "Resend": "Clean APIs, SDKs, React Email; pristine shared IPs; fast onboarding.",
   "Elastic Email": "Low‑cost bulk sending; analytics; mind shared‑IP reputation.",
-  "Amazon SES": "Massive scale; best with AWS stack; requires DNS/auth warmup.",
+  "Maileroo": "SMTP relay with clean API, inbound support, logs, and fast support; easy domain setup.",
   "SMTP2GO": "Reliable SMTP relay, detailed logs, helpful support, easy setup.",
   "Mailtrap": "Strong DX: logs, webhooks, templates; Campaigns and API unified.",
   "MailerSend": "Modern UI, inbound routing, templates; granular roles/tokens.",
