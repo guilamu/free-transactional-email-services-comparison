@@ -149,6 +149,14 @@
       padding: 60px 30px;
       color: #6c757d;
     }
+
+    /* Hide Notes column on small screens */
+    @media (max-width: 640px) {
+      #pricesTable th:nth-child(4),
+      #pricesTable td:nth-child(4) {
+        display: none;
+      }
+    }
     
     @media (max-width: 968px) {
       h1 {
