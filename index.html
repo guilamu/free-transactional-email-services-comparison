@@ -269,7 +269,7 @@
         
         // Notes - MERGE FROM NOTES FILE
         const notesCell = row.insertCell(3);
-        const note = providerNotes[service.name] || '';  // ← KEY CHANGE HERE
+        const note = providerNotes[service.name] || '';  
         notesCell.innerHTML = note 
           ? `<span class="note">${note}</span>` 
           : '';
