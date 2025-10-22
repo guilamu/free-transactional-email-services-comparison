@@ -288,6 +288,92 @@
         console.error('Error fetching data:', error);
       });
   </script>
-  <script src="notes.js"></script>
+<script src="notes.js"></script>
+<script>
+  function formatDate(isoString) {
+    if (!isoString) return 'Never';
+    const date = new Date(isoString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short', 
+      day: 'numeric'
+    });
+  }
+
+  function formatDateTime(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric', 
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.querySelector('#pricesTable tbody');
+      const lastUpdate = data[0]?.lastScraped || new Date().toISOString();
+      
+      // Update last update time
+      document.getElementById('lastUpdate').textContent = formatDateTime(lastUpdate);
+      
+      // Populate table
+      data.forEach(service => {
+        const row = tbody.insertRow();
+        
+        // Service name with link
+        const nameCell = row.insertCell(0);
+        nameCell.innerHTML = `
+          <span class="service-name">${service.name}</span>
+          <a href="${service.url}" target="_blank" class="service-link" title="Visit pricing page">↗</a>
+        `;
+        
+        // Daily limit
+        row.insertCell(1).textContent = service.dailyLimit 
+          ? service.dailyLimit.toLocaleString() 
+          : 'N/A';
+        
+        // Monthly limit
+        row.insertCell(2).textContent = service.monthlyLimit 
+          ? service.monthlyLimit.toLocaleString() 
+          : 'N/A';
+        
+        // Notes - MERGE FROM NOTES FILE
+        const notesCell = row.insertCell(3);
+        const note = providerNotes[service.name] || '';  // ← KEY CHANGE HERE
+        notesCell.innerHTML = note 
+          ? `<span class="note">${note}</span>` 
+          : '';
+        
+        // Status badge
+        const statusCell = row.insertCell(4);
+        const statusClass = service.scrapedSuccessfully ? 'status-scraped' : 'status-fallback';
+        const statusText = service.scrapedSuccessfully ? 'Live' : 'Static';
+        statusCell.innerHTML = `<span class="status-badge ${statusClass}">${statusText}</span>`;
+        
+        // Last updated
+        const updatedCell = row.insertCell(5);
+        updatedCell.className = 'date-cell';
+        updatedCell.textContent = formatDate(service.lastScraped);
+        
+        // Last changed
+        const changedCell = row.insertCell(6);
+        changedCell.className = 'date-cell';
+        changedCell.textContent = formatDate(service.lastChanged);
+      });
+      
+      // Show table, hide loading
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('pricesTable').style.display = 'table';
+    })
+    .catch(error => {
+      document.getElementById('loading').innerHTML = 
+        '<p style="color: red;">Error loading data. Please try again later.</p>';
+      console.error('Error fetching data:', error);
+    });
+</script>
 </body>
 </html>
