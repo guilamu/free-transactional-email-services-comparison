@@ -1,5 +1,5 @@
 // notes.js - Client-side notes (no module.exports needed)
-const providerNotes = {
+window.providerNotes = {
   "SendPulse": "SMTP+API, automations and SMS; simple UI; multilingual support.",
   "Brevo (Sendinblue)": "EU-based, Marketing suite with CRM/automation; EU hosting options.",
   "Mailjet": "Team collaboration on templates; EU data centers; solid APIs.",
