@@ -5,7 +5,7 @@
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2025-10-23T11:50:52.535Z",
+    "lastScraped": "2025-10-23T11:52:47.437Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-10-23T11:51:03.204Z",
+    "lastScraped": "2025-10-23T11:52:58.529Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +25,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2025-10-23T11:51:05.463Z",
+    "lastScraped": "2025-10-23T11:53:00.585Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +35,7 @@
     "dailyLimit": 150,
     "monthlyLimit": 3500,
     "note": "Email API/SMTP",
-    "lastScraped": "2025-10-23T11:51:10.442Z",
+    "lastScraped": "2025-10-23T11:53:05.335Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:20:24.418Z"
   },
@@ -45,7 +45,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2025-10-23T11:50:54.880Z",
+    "lastScraped": "2025-10-23T11:52:49.513Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T14:52:01.760Z"
   },
@@ -55,7 +55,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-10-23T11:51:00.369Z",
+    "lastScraped": "2025-10-23T11:52:55.103Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T15:31:38.077Z"
   },
@@ -65,7 +65,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-10-23T11:51:16.113Z",
+    "lastScraped": "2025-10-23T11:53:10.817Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-22T08:05:17.891Z"
   },
@@ -73,7 +73,7 @@
     "name": "Sweego",
     "dailyLimit": 100,
     "monthlyLimit": 3000,
-    "url": "https://www.sweego.io/pricing",
+    "url": "https://api.sweego.io/billing/plans",
     "lastScraped": "2025-10-23T11:45:08.350Z",
     "scrapedSuccessfully": false,
     "lastChanged": "2025-10-23T11:45:08.350Z"
@@ -84,7 +84,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2025-10-23T11:51:08.137Z",
+    "lastScraped": "2025-10-23T11:53:02.977Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:04:57.538Z"
   },
@@ -94,7 +94,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": "Requires credit card",
-    "lastScraped": "2025-10-23T11:50:57.894Z",
+    "lastScraped": "2025-10-23T11:52:52.711Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -104,7 +104,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 100,
     "note": "Free Developer plan",
-    "lastScraped": "2025-10-23T11:51:13.553Z",
+    "lastScraped": "2025-10-23T11:53:08.194Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-22T06:24:14.445Z"
   }
