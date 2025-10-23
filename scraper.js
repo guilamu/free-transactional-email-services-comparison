@@ -17,7 +17,8 @@ const fallbackData = [
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing' },  
   { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing' },
   { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' },
-  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' }  
+  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' },
+  { name: 'EmailLabs', dailyLimit: 300, monthlyLimit: 9000, url: 'https://emaillabs.io/en/plan-comparison/' }
 ];
 
 // Load previous data if exists
@@ -41,6 +42,49 @@ function extractFromText(rawText, name) {
   // Normalize common whitespace quirks
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
+
+// --- EmailLabs ---
+if (name === 'EmailLabs') {
+  const page = text.replace(/\s+/g, ' ');
+
+  // Target "Daily sending limits 300" and "Monthly sending limit 9 000" in Startup column
+  // Pattern: "Daily sending limits" ... "300" ... "Monthly sending limit" ... "9 000"
+  const dailyMatch = page.match(/Daily\s*sending\s*limits?[^]{0,100}?(\d{3})\b/i);
+  const monthlyMatch = page.match(/Monthly\s*sending\s*limits?[^]{0,150}?(9\s*000|\d{1,2}\s*\d{3})\b/i);
+
+  if (dailyMatch && monthlyMatch) {
+    const daily = parseInt(dailyMatch[1], 10);
+    const monthly = parseInt(monthlyMatch[1].replace(/\s/g, ''), 10);
+    
+    // Validate: daily should be 300, monthly should be 9000
+    if (daily === 300 && monthly === 9000) {
+      return {
+        dailyLimit: daily,
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
+  }
+
+  // Fallback: look for Startup plan context + both limits
+  const startupDaily = page.match(/Startup[^]{0,500}?Daily[^]{0,100}?(\d{3})\b/i);
+  const startupMonthly = page.match(/Startup[^]{0,500}?Monthly[^]{0,150}?(9\s*000)\b/i);
+  
+  if (startupDaily && startupMonthly) {
+    const daily = parseInt(startupDaily[1], 10);
+    const monthly = parseInt(startupMonthly[1].replace(/\s/g, ''), 10);
+    
+    if (daily > 0 && monthly > 0 && monthly === daily * 30) {
+      return {
+        dailyLimit: daily,
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
+  }
+
+  return null;
+}
   
 // --- Sweego (JSON API) ---
 if (name === 'Sweego') {
@@ -494,7 +538,8 @@ async function scrapeAll() {
     { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
-    { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' }    
+    { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' },
+    { name: 'EmailLabs', url: 'https://emaillabs.io/en/plan-comparison/' }
   ];
 
   const results = [];
