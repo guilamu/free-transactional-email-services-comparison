@@ -12,5 +12,6 @@ const providerNotes = {
   "MailerSend": "Modern UI, inbound routing, templates; granular roles/tokens.",
   "Mailchimp Transactional": "Best when on Mailchimp; strict compliance/reputation.",
   "Postmark": "Excellent deliverability/speed; clear events & template tools.",
-  "Sweego": "EU-based, Email + SMS; test mode, webhooks, templates; 7-day logs."  
+  "Sweego": "EU-based, Email + SMS; test mode, webhooks, templates; 7-day logs.",
+  "EmailLabs": "EU-based, SMTP/API; CSA certified; 1-day logs; dedicated IP."
 };
