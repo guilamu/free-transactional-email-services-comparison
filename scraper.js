@@ -45,17 +45,15 @@ function extractFromText(rawText, name) {
 // --- Lettermint ---
 if (name === 'Lettermint') {
   const page = text.replace(/\s+/g, ' ');
+  
+  console.log('   [DEBUG] Lettermint text sample (first 500 chars):', page.substring(0, 500));
 
-  // Target "300 emails/month" near "Free" or "Developer"
-  // Examples: "Free ... 300 emails/month", "300 Monthly emails included"
-  const monthlyMatch = 
-    page.match(/(?:Free|Developer)[^]{0,200}?(\d{3})\s*emails?\s*(?:\/|per)\s*month/i) ||
-    page.match(/(\d{3})\s*emails?\s*(?:\/|per)\s*month[^]{0,100}?(?:Free|Developer)/i) ||
-    page.match(/Monthly\s*emails?\s*included[^]{0,50}?(\d{3})\b/i);
+  // Pattern 1: "300 emails/month" near free context
+  const pattern1 = page.match(/(?:Free|Developer|No credit card)[^]{0,300}?(\d{3})\s*emails?\s*(?:\/|per)\s*month/i);
+  console.log('   [DEBUG] Pattern 1 match:', pattern1);
 
-  if (monthlyMatch) {
-    const monthly = parseInt(monthlyMatch[1], 10);
-    // Validate range to avoid capturing paid plan volumes (10000)
+  if (pattern1) {
+    const monthly = parseInt(pattern1[1], 10);
     if (monthly > 0 && monthly <= 500) {
       return {
         dailyLimit: Math.floor(monthly / 30),
@@ -65,21 +63,47 @@ if (name === 'Lettermint') {
     }
   }
 
-  // Fallback: look for table row pattern "Free|300|..."
-  const tableMatch = page.match(/Free[|\s]+(\d{3})[|\s]/i);
-  if (tableMatch) {
-    const monthly = parseInt(tableMatch[1], 10);
+  // Pattern 2: Table-like "Free" then "300" within 100 chars
+  const pattern2 = page.match(/Free[^]{0,100}?(\d{3})\b/i);
+  console.log('   [DEBUG] Pattern 2 match:', pattern2);
+  
+  if (pattern2) {
+    const monthly = parseInt(pattern2[1], 10);
     if (monthly > 0 && monthly <= 500) {
       return {
         dailyLimit: Math.floor(monthly / 30),
         monthlyLimit: monthly,
         note: null
       };
+    }
+  }
+
+  // Pattern 3: Direct "300" before "10.000" (the paid volumes)
+  const allNumbers = page.match(/\b(\d{3})\b/g);
+  console.log('   [DEBUG] All 3-digit numbers found:', allNumbers);
+  
+  if (allNumbers && allNumbers.length > 0) {
+    // Take the smallest 3-digit number that appears before "10.000" or "10000"
+    const idx10k = page.search(/10[.,]?000/);
+    if (idx10k > 0) {
+      const beforePaid = page.substring(0, idx10k);
+      const match = beforePaid.match(/\b(\d{3})\b/);
+      if (match) {
+        const monthly = parseInt(match[1], 10);
+        if (monthly > 0 && monthly <= 500) {
+          return {
+            dailyLimit: Math.floor(monthly / 30),
+            monthlyLimit: monthly,
+            note: null
+          };
+        }
+      }
     }
   }
 
   return null;
 }
+
   
 // --- Sweego (JSON API) ---
 if (name === 'Sweego') {
