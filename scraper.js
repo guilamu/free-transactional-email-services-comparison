@@ -17,7 +17,7 @@ const fallbackData = [
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing' },  
   { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing' },
   { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' },
-  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.sweego.io/pricing' }
+  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' }
 ];
 
 // Load previous data if exists
