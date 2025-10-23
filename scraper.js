@@ -42,39 +42,45 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
-// --- Sweego ---
+// --- Sweego (JSON API) ---
 if (name === 'Sweego') {
-  const page = text.replace(/\s+/g, ' ');
-
-  // Target "100 emails" near "Free" plan header and "per day"
-  // Examples: "100 emails sent per day", "100 emails by API & SMTP"
-  const dailyMatch = 
-    page.match(/Free[^]{0,200}?(\d{2,3})\s*emails?\s*(?:sent\s*)?(?:per|by)\s*day/i) ||
-    page.match(/(\d{2,3})\s*emails?\s*(?:sent\s*)?per\s*day[^]{0,80}?Free/i);
-
-  if (dailyMatch) {
-    const daily = parseInt(dailyMatch[1], 10);
-    // Sweego free tier = 100 emails/day → ~3000/month
-    return {
-      dailyLimit: daily,
-      monthlyLimit: daily * 30,
-      note: null
-    };
+  // Try to parse as JSON first
+  let jsonData;
+  try {
+    jsonData = JSON.parse(text);
+  } catch {
+    return null; // Not valid JSON
   }
 
-  // Fallback: look for "100 emails" in the free plan section
-  const looseMatch = page.match(/Free[^]{0,150}?(\d{2,3})\s*emails/i);
-  if (looseMatch) {
-    const daily = parseInt(looseMatch[1], 10);
-    if (daily > 0 && daily <= 200) {
-      return {
-        dailyLimit: daily,
-        monthlyLimit: daily * 30,
-        note: null
-      };
+  // Look for the free plan in the array
+  // Expected structure: array of plan objects with properties like:
+  // { name: "free", dailyEmails: 100, ... } or similar
+  if (Array.isArray(jsonData)) {
+    const freePlan = jsonData.find(p => 
+      p.name?.toLowerCase() === 'free' || 
+      p.id?.toLowerCase() === 'free' ||
+      p.slug?.toLowerCase() === 'free'
+    );
+    
+    if (freePlan) {
+      // Try common field names for daily limit
+      const daily = freePlan.dailyLimit || 
+                    freePlan.daily_limit ||
+                    freePlan.dailyEmails ||
+                    freePlan.daily_emails ||
+                    freePlan.emailsPerDay ||
+                    freePlan.emails_per_day;
+      
+      if (daily && typeof daily === 'number') {
+        return {
+          dailyLimit: daily,
+          monthlyLimit: daily * 30,
+          note: null
+        };
+      }
     }
   }
-
+  
   return null;
 }
 
