@@ -5,7 +5,7 @@
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2025-10-23T12:06:12.564Z",
+    "lastScraped": "2025-10-23T12:16:03.391Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-10-23T12:06:25.671Z",
+    "lastScraped": "2025-10-23T12:16:13.008Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +25,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2025-10-23T12:06:27.871Z",
+    "lastScraped": "2025-10-23T12:16:15.364Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +35,7 @@
     "dailyLimit": 150,
     "monthlyLimit": 3500,
     "note": "Email API/SMTP",
-    "lastScraped": "2025-10-23T12:06:32.829Z",
+    "lastScraped": "2025-10-23T12:16:20.283Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:20:24.418Z"
   },
@@ -45,7 +45,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2025-10-23T12:06:14.783Z",
+    "lastScraped": "2025-10-23T12:16:05.604Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T14:52:01.760Z"
   },
@@ -55,7 +55,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-10-23T12:06:23.504Z",
+    "lastScraped": "2025-10-23T12:16:10.860Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T15:31:38.077Z"
   },
@@ -65,7 +65,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-10-23T12:06:37.949Z",
+    "lastScraped": "2025-10-23T12:16:25.291Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-22T08:05:17.891Z"
   },
@@ -75,7 +75,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-10-23T12:06:40.838Z",
+    "lastScraped": "2025-10-23T12:16:28.305Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-23T11:45:08.350Z"
   },
@@ -85,7 +85,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2025-10-23T12:06:30.576Z",
+    "lastScraped": "2025-10-23T12:16:17.855Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-21T16:04:57.538Z"
   },
@@ -95,18 +95,9 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": "Requires credit card",
-    "lastScraped": "2025-10-23T12:06:21.264Z",
+    "lastScraped": "2025-10-23T12:16:08.387Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
-  },
-  {
-    "name": "Lettermint",
-    "dailyLimit": 10,
-    "monthlyLimit": 300,
-    "url": "https://lettermint.co/pricing",
-    "lastScraped": "2025-10-23T12:04:56.767Z",
-    "scrapedSuccessfully": false,
-    "lastChanged": "2025-10-23T12:04:56.767Z"
   },
   {
     "name": "Postmark",
@@ -114,7 +105,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 100,
     "note": "Free Developer plan",
-    "lastScraped": "2025-10-23T12:06:35.440Z",
+    "lastScraped": "2025-10-23T12:16:22.988Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2025-10-22T06:24:14.445Z"
   }
