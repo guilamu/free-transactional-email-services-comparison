@@ -17,8 +17,7 @@ const fallbackData = [
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing' },  
   { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing' },
   { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' },
-  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' },
-  { name: 'Lettermint', dailyLimit: 10, monthlyLimit: 300, url: 'https://lettermint.co/pricing' }
+  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' }  
 ];
 
 // Load previous data if exists
@@ -42,68 +41,6 @@ function extractFromText(rawText, name) {
   // Normalize common whitespace quirks
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
-// --- Lettermint ---
-if (name === 'Lettermint') {
-  const page = text.replace(/\s+/g, ' ');
-  
-  console.log('   [DEBUG] Lettermint text sample (first 500 chars):', page.substring(0, 500));
-
-  // Pattern 1: "300 emails/month" near free context
-  const pattern1 = page.match(/(?:Free|Developer|No credit card)[^]{0,300}?(\d{3})\s*emails?\s*(?:\/|per)\s*month/i);
-  console.log('   [DEBUG] Pattern 1 match:', pattern1);
-
-  if (pattern1) {
-    const monthly = parseInt(pattern1[1], 10);
-    if (monthly > 0 && monthly <= 500) {
-      return {
-        dailyLimit: Math.floor(monthly / 30),
-        monthlyLimit: monthly,
-        note: null
-      };
-    }
-  }
-
-  // Pattern 2: Table-like "Free" then "300" within 100 chars
-  const pattern2 = page.match(/Free[^]{0,100}?(\d{3})\b/i);
-  console.log('   [DEBUG] Pattern 2 match:', pattern2);
-  
-  if (pattern2) {
-    const monthly = parseInt(pattern2[1], 10);
-    if (monthly > 0 && monthly <= 500) {
-      return {
-        dailyLimit: Math.floor(monthly / 30),
-        monthlyLimit: monthly,
-        note: null
-      };
-    }
-  }
-
-  // Pattern 3: Direct "300" before "10.000" (the paid volumes)
-  const allNumbers = page.match(/\b(\d{3})\b/g);
-  console.log('   [DEBUG] All 3-digit numbers found:', allNumbers);
-  
-  if (allNumbers && allNumbers.length > 0) {
-    // Take the smallest 3-digit number that appears before "10.000" or "10000"
-    const idx10k = page.search(/10[.,]?000/);
-    if (idx10k > 0) {
-      const beforePaid = page.substring(0, idx10k);
-      const match = beforePaid.match(/\b(\d{3})\b/);
-      if (match) {
-        const monthly = parseInt(match[1], 10);
-        if (monthly > 0 && monthly <= 500) {
-          return {
-            dailyLimit: Math.floor(monthly / 30),
-            monthlyLimit: monthly,
-            note: null
-          };
-        }
-      }
-    }
-  }
-
-  return null;
-}
-
   
 // --- Sweego (JSON API) ---
 if (name === 'Sweego') {
@@ -557,8 +494,7 @@ async function scrapeAll() {
     { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
-    { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' },
-    { name: 'Lettermint', url: 'https://lettermint.co/pricing' }
+    { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' }    
   ];
 
   const results = [];
