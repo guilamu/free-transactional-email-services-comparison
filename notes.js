@@ -12,6 +12,5 @@ const providerNotes = {
   "MailerSend": "Modern UI, inbound routing, templates; granular roles/tokens.",
   "Mailchimp Transactional": "Best when on Mailchimp; strict compliance/reputation.",
   "Postmark": "Excellent deliverability/speed; clear events & template tools.",
-  "Sweego": "EU-based, Email + SMS; test mode, webhooks, templates; 7-day logs."
-  "Lettermint": "EU-based, GDPR-compliant; SMTP/API; 28-day logs; no credit card."
+  "Sweego": "EU-based, Email + SMS; test mode, webhooks, templates; 7-day logs."  
 };
