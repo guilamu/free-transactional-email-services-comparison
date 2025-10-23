@@ -42,66 +42,44 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
-// --- Sweego (JSON API with debug) ---
+// --- Sweego (JSON API) ---
 if (name === 'Sweego') {
   let jsonData;
   try {
     jsonData = JSON.parse(text);
   } catch (err) {
-    console.log('   [DEBUG] Sweego: Not valid JSON, raw text length:', text.length);
     return null;
   }
 
-  console.log('   [DEBUG] Sweego JSON:', JSON.stringify(jsonData, null, 2));
-
-  // If it's an array, find free plan
   if (Array.isArray(jsonData)) {
-    const freePlan = jsonData.find(p => 
-      (p.name && p.name.toLowerCase() === 'free') ||
-      (p.id && p.id.toLowerCase() === 'free') ||
-      (p.slug && p.slug.toLowerCase() === 'free') ||
-      (p.type && p.type.toLowerCase() === 'free')
+    // Find the plan where plan.range_name = "Free"
+    const freePlanEntry = jsonData.find(entry => 
+      entry.plan && 
+      entry.plan.range_name && 
+      entry.plan.range_name.toLowerCase() === 'free'
     );
     
-    console.log('   [DEBUG] Found free plan:', freePlan);
-    
-    if (freePlan) {
-      const daily = freePlan.dailyLimit || 
-                    freePlan.daily_limit ||
-                    freePlan.dailyEmails ||
-                    freePlan.daily_emails ||
-                    freePlan.emailsPerDay ||
-                    freePlan.emails_per_day ||
-                    freePlan.limit ||
-                    freePlan.quota;
+    if (freePlanEntry && freePlanEntry.features) {
+      // Find the nb_emails feature with period = "day"
+      const emailFeature = freePlanEntry.features.find(f => 
+        f.name === 'nb_emails' && f.period === 'day'
+      );
       
-      console.log('   [DEBUG] Extracted daily limit:', daily);
-      
-      if (daily && typeof daily === 'number' && daily > 0) {
-        return {
-          dailyLimit: daily,
-          monthlyLimit: daily * 30,
-          note: null
-        };
+      if (emailFeature && emailFeature.value) {
+        const daily = parseInt(emailFeature.value, 10);
+        if (daily > 0) {
+          return {
+            dailyLimit: daily,
+            monthlyLimit: daily * 30,
+            note: null
+          };
+        }
       }
-    }
-  }
-  
-  // If it's an object with a "plans" property
-  if (jsonData.plans && Array.isArray(jsonData.plans)) {
-    console.log('   [DEBUG] Found plans array in object');
-    const freePlan = jsonData.plans.find(p => 
-      p.name?.toLowerCase() === 'free'
-    );
-    if (freePlan) {
-      const daily = freePlan.dailyLimit || freePlan.limit || 100;
-      return { dailyLimit: daily, monthlyLimit: daily * 30, note: null };
     }
   }
   
   return null;
 }
-
 
 // --- Maileroo ---
 if (name === 'Maileroo') {
