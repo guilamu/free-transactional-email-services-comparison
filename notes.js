@@ -11,5 +11,6 @@ const providerNotes = {
   "Mailtrap": "Strong DX: logs, webhooks, templates; Campaigns and API unified.",
   "MailerSend": "Modern UI, inbound routing, templates; granular roles/tokens.",
   "Mailchimp Transactional": "Best when on Mailchimp; strict compliance/reputation.",
-  "Postmark": "Excellent deliverability/speed; clear events & template tools."
+  "Postmark": "Excellent deliverability/speed; clear events & template tools.",
+  "Sweego": "French API, email + SMS; test mode, webhooks, templates; 7-day logs on free tier."
 };
