@@ -17,7 +17,8 @@ const fallbackData = [
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing' },  
   { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing' },
   { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' },
-  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' }
+  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' },
+  { name: 'Lettermint', dailyLimit: 10, monthlyLimit: 300, url: 'https://lettermint.co/pricing' }
 ];
 
 // Load previous data if exists
@@ -41,7 +42,45 @@ function extractFromText(rawText, name) {
   // Normalize common whitespace quirks
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
+// --- Lettermint ---
+if (name === 'Lettermint') {
+  const page = text.replace(/\s+/g, ' ');
 
+  // Target "300 emails/month" near "Free" or "Developer"
+  // Examples: "Free ... 300 emails/month", "300 Monthly emails included"
+  const monthlyMatch = 
+    page.match(/(?:Free|Developer)[^]{0,200}?(\d{3})\s*emails?\s*(?:\/|per)\s*month/i) ||
+    page.match(/(\d{3})\s*emails?\s*(?:\/|per)\s*month[^]{0,100}?(?:Free|Developer)/i) ||
+    page.match(/Monthly\s*emails?\s*included[^]{0,50}?(\d{3})\b/i);
+
+  if (monthlyMatch) {
+    const monthly = parseInt(monthlyMatch[1], 10);
+    // Validate range to avoid capturing paid plan volumes (10000)
+    if (monthly > 0 && monthly <= 500) {
+      return {
+        dailyLimit: Math.floor(monthly / 30),
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
+  }
+
+  // Fallback: look for table row pattern "Free|300|..."
+  const tableMatch = page.match(/Free[|\s]+(\d{3})[|\s]/i);
+  if (tableMatch) {
+    const monthly = parseInt(tableMatch[1], 10);
+    if (monthly > 0 && monthly <= 500) {
+      return {
+        dailyLimit: Math.floor(monthly / 30),
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
+  }
+
+  return null;
+}
+  
 // --- Sweego (JSON API) ---
 if (name === 'Sweego') {
   let jsonData;
@@ -494,7 +533,8 @@ async function scrapeAll() {
     { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
-    { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' }
+    { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' },
+    { name: 'Lettermint', url: 'https://lettermint.co/pricing' }
   ];
 
   const results = [];
