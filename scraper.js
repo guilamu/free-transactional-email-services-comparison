@@ -497,7 +497,7 @@ async function scrapeAll() {
     { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
-    { name: 'Sweego', url: 'https://www.sweego.io/pricing' }
+    { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' }
   ];
 
   const results = [];
