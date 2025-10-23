@@ -178,9 +178,9 @@
   <div class="container">
     <header>
       <h1>📧 Free Transactional Email Services</h1>
-      <p class="subtitle">Compare free tier limits across major providers • Updated daily</p>
+      <p class="subtitle">Compare free tier limits across <span id="providerCount">…</span> providers • Updated daily</p>
     </header>
-    
+   
     <div class="last-update">
       Last check: <strong><span id="lastUpdate">Loading...</span></strong>
     </div>
@@ -216,6 +216,20 @@
 
 <script src="notes.js"></script>
 <script>
+  fetch('data.json')
+  .then(r => r.json())
+  .then(data => {
+    const tbody = document.querySelector('#pricesTable tbody');
+    const lastUpdate = data[0]?.lastScraped || new Date().toISOString();
+    document.getElementById('lastUpdate').textContent = formatDateTime(lastUpdate);
+    
+    // Update provider count
+    document.getElementById('providerCount').textContent = data.length;
+    
+    data.forEach(service => {
+      // ... rest of your rendering code
+    });
+  
   function formatDate(isoString) {
     if (!isoString) return 'Never';
     const date = new Date(isoString);
