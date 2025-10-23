@@ -42,36 +42,42 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
-// --- Sweego (JSON API) ---
+// --- Sweego (JSON API with debug) ---
 if (name === 'Sweego') {
-  // Try to parse as JSON first
   let jsonData;
   try {
     jsonData = JSON.parse(text);
-  } catch {
-    return null; // Not valid JSON
+  } catch (err) {
+    console.log('   [DEBUG] Sweego: Not valid JSON, raw text length:', text.length);
+    return null;
   }
 
-  // Look for the free plan in the array
-  // Expected structure: array of plan objects with properties like:
-  // { name: "free", dailyEmails: 100, ... } or similar
+  console.log('   [DEBUG] Sweego JSON:', JSON.stringify(jsonData, null, 2));
+
+  // If it's an array, find free plan
   if (Array.isArray(jsonData)) {
     const freePlan = jsonData.find(p => 
-      p.name?.toLowerCase() === 'free' || 
-      p.id?.toLowerCase() === 'free' ||
-      p.slug?.toLowerCase() === 'free'
+      (p.name && p.name.toLowerCase() === 'free') ||
+      (p.id && p.id.toLowerCase() === 'free') ||
+      (p.slug && p.slug.toLowerCase() === 'free') ||
+      (p.type && p.type.toLowerCase() === 'free')
     );
     
+    console.log('   [DEBUG] Found free plan:', freePlan);
+    
     if (freePlan) {
-      // Try common field names for daily limit
       const daily = freePlan.dailyLimit || 
                     freePlan.daily_limit ||
                     freePlan.dailyEmails ||
                     freePlan.daily_emails ||
                     freePlan.emailsPerDay ||
-                    freePlan.emails_per_day;
+                    freePlan.emails_per_day ||
+                    freePlan.limit ||
+                    freePlan.quota;
       
-      if (daily && typeof daily === 'number') {
+      console.log('   [DEBUG] Extracted daily limit:', daily);
+      
+      if (daily && typeof daily === 'number' && daily > 0) {
         return {
           dailyLimit: daily,
           monthlyLimit: daily * 30,
@@ -81,8 +87,21 @@ if (name === 'Sweego') {
     }
   }
   
+  // If it's an object with a "plans" property
+  if (jsonData.plans && Array.isArray(jsonData.plans)) {
+    console.log('   [DEBUG] Found plans array in object');
+    const freePlan = jsonData.plans.find(p => 
+      p.name?.toLowerCase() === 'free'
+    );
+    if (freePlan) {
+      const daily = freePlan.dailyLimit || freePlan.limit || 100;
+      return { dailyLimit: daily, monthlyLimit: daily * 30, note: null };
+    }
+  }
+  
   return null;
 }
+
 
 // --- Maileroo ---
 if (name === 'Maileroo') {
