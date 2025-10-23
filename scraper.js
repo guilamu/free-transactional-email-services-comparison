@@ -16,7 +16,8 @@ const fallbackData = [
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing' },  
   { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing' },
-  { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' }
+  { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' },
+  { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.sweego.io/pricing' }
 ];
 
 // Load previous data if exists
@@ -40,6 +41,42 @@ function extractFromText(rawText, name) {
   // Normalize common whitespace quirks
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
+
+// --- Sweego ---
+if (name === 'Sweego') {
+  const page = text.replace(/\s+/g, ' ');
+
+  // Target "100 emails" near "Free" plan header and "per day"
+  // Examples: "100 emails sent per day", "100 emails by API & SMTP"
+  const dailyMatch = 
+    page.match(/Free[^]{0,200}?(\d{2,3})\s*emails?\s*(?:sent\s*)?(?:per|by)\s*day/i) ||
+    page.match(/(\d{2,3})\s*emails?\s*(?:sent\s*)?per\s*day[^]{0,80}?Free/i);
+
+  if (dailyMatch) {
+    const daily = parseInt(dailyMatch[1], 10);
+    // Sweego free tier = 100 emails/day → ~3000/month
+    return {
+      dailyLimit: daily,
+      monthlyLimit: daily * 30,
+      note: null
+    };
+  }
+
+  // Fallback: look for "100 emails" in the free plan section
+  const looseMatch = page.match(/Free[^]{0,150}?(\d{2,3})\s*emails/i);
+  if (looseMatch) {
+    const daily = parseInt(looseMatch[1], 10);
+    if (daily > 0 && daily <= 200) {
+      return {
+        dailyLimit: daily,
+        monthlyLimit: daily * 30,
+        note: null
+      };
+    }
+  }
+
+  return null;
+}
 
 // --- Maileroo ---
 if (name === 'Maileroo') {
@@ -453,7 +490,8 @@ async function scrapeAll() {
     { name: 'SMTP2GO', url: 'https://www.smtp2go.com/pricing/' },
     { name: 'Mailtrap', url: 'https://mailtrap.io/pricing/' },
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
-    { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' }
+    { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
+    { name: 'Sweego', url: 'https://www.sweego.io/pricing' }
   ];
 
   const results = [];
