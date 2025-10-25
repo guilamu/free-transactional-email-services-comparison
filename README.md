@@ -82,7 +82,7 @@ Contributions are welcome! Here's how to help:
 - Handle region-specific limits
 
 ## 📂 Project structure
-
+<pre>
 ├── scraper.js # Main scraper with provider-specific parsers\
 ├── notes.js # Human-curated provider notes\
 ├── index.html # Frontend comparison table\
@@ -91,7 +91,7 @@ Contributions are welcome! Here's how to help:
 │ └── workflows/\
 │ └── update-data.yml # Daily cron job\
 └── README.md\
-
+</pre>
 
 ## 🧩 Parser anatomy
 
