@@ -40,16 +40,16 @@ Pricing pages → Node scraper → data.json → GitHub Pages → You
 
 ## 🚀 Running locally
 
-Clone the repo
-git clone https://github.com/guilamu/free-transactional-email-services-comparison.git
-cd free-transactional-email-services-comparison
-Install dependencies
-npm install
-Run the scraper
-node scraper.js
-Serve locally
-npx http-server
-Open http://localhost:8080
+- Clone the repo
+- git clone https://github.com/guilamu/free-transactional-email-services-comparison.git
+- cd free-transactional-email-services-comparison
+- Install dependencies
+- npm install
+- Run the scraper
+- node scraper.js
+- Serve locally
+- npx http-server
+- Open http://localhost:8080
 
 ## 🤝 Contributing
 
