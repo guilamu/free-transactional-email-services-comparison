@@ -18,14 +18,11 @@ A simple, transparent comparison of **renewable free tier limits** for transacti
 
 ## 📊 What's included?
 
-Only services with **renewable free tiers** are listed—no one-time trials or credit-only promos. Currently tracking:
+Only services with **renewable free tiers** are listed—no one-time trials or credit-only promos. Currently tracking **12 providers**:
 
-- SendPulse, Brevo (Sendinblue), Mailjet, Mailgun
-- Resend, Elastic Email, Amazon SES
-- SMTP2GO, Mailtrap, MailerSend, Postmark
-- Mailchimp Transactional (Mandrill)
-- Sweego, Lettermint, EmailLabs, Maileroo
-- *...and more being added*
+- Brevo (Sendinblue), EmailLabs, MailerSend, Maileroo
+- Mailgun, Mailjet, Mailtrap, Postmark
+- Resend, SMTP2GO, SendPulse, Sweego
 
 ## 🛠️ How it works
 
