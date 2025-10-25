@@ -140,9 +140,9 @@ GitHub Actions runs `scraper.js` daily at 2 AM UTC: - name: Update Pricing Data 
 - **Accuracy**: Always verify limits on official provider sites before committing
 - **Affiliation**: No affiliate relationships with any provider
 
-## 🐛 Found an issue?
+## 🐛 Found an issue, want to add a new provider?
 
-[Open an issue](https://github.com/guilamu/free-transactional-email-services-comparison/issues/new) or submit a PR!
+[Open an issue](https://github.com/guilamu/free-transactional-email-services-comparison/issues/new/choose) or submit a PR!
 
 ## 🙏 Credits
 
