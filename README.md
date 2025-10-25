@@ -6,9 +6,10 @@
 
 [![Data Update](https://github.com/guilamu/free-transactional-email-services-comparison/actions/workflows/update-data.yml/badge.svg)](https://github.com/guilamu/free-transactional-email-services-comparison/actions)
 
-## 🎯 What is this?
+## 🎯 What is this and why?
 
-A simple, transparent comparison of **renewable free tier limits** for transactional email services. Perfect for indie hackers, startups, and developers choosing an email provider without wading through marketing pages.
+A simple, transparent comparison of **renewable free tier limits** built to save time for developers choosing transactional email providers. Inspired by frustration with outdated comparison posts and affiliate-heavy "reviews.". Perfect for indie hackers, startups, and developers choosing an email provider without wading through marketing pages. 
+
 
 ### Key features
 - ✅ **Live scraped data** — Daily updates from official pricing pages
@@ -64,7 +65,7 @@ Contributions are welcome! Here's how to help:
 ### Add a new provider
 
 1. Check if it offers a **renewable free tier** (not trial-only)
-2. Open an issue with:
+2. [Open an issue with:](https://github.com/guilamu/free-transactional-email-services-comparison/issues/new?template=bug_report.md)
    - Provider name
    - Pricing page URL
    - Free tier details (daily/monthly limits)
@@ -75,7 +76,7 @@ Contributions are welcome! Here's how to help:
 
 ### Fix incorrect data
 
-1. Open an issue with:
+1. [Open an issue with:](https://github.com/guilamu/free-transactional-email-services-comparison/issues/new?template=feature_request.md)
    - Provider name
    - Current vs. correct limits
    - Link to official source
@@ -85,7 +86,6 @@ Contributions are welcome! Here's how to help:
 
 - Make parsers more resilient to page changes
 - Add support for JS-rendered pages (headless browser)
-- Handle region-specific limits
 
 ## 📂 Project structure
 <pre>
@@ -145,15 +145,3 @@ GitHub Actions runs `scraper.js` daily at 2 AM UTC: - name: Update Pricing Data 
 - **Data**: Compiled from publicly available pricing pages
 - **Accuracy**: Always verify limits on official provider sites before committing
 - **Affiliation**: No affiliate relationships with any provider
-
-## 🐛 Found an issue, want to add a new provider?
-
-[Open an issue](https://github.com/guilamu/free-transactional-email-services-comparison/issues/new/choose) or submit a PR!
-
-## 🙏 Credits
-
-Built to save time for developers choosing transactional email providers. Inspired by frustration with outdated comparison posts and affiliate-heavy "reviews."
-
----
-
-**[View the comparison →](https://guilamu.github.io/free-transactional-email-services-comparison/)**
