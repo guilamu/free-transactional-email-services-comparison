@@ -33,9 +33,9 @@ jobs:
           head -20 data.json
 
       - name: Update README
-          run: |
-            node update-readme.js
-            git add README.md
+        run: |
+          node update-readme.js
+          git add README.md
 
       - name: Commit and push changes
         run: |
