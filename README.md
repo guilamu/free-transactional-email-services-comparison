@@ -89,14 +89,14 @@ Contributions are welcome! Here's how to help:
 
 ## 📂 Project structure
 <pre>
-├── scraper.js # Main scraper with provider-specific parsers\
-├── notes.js # Human-curated provider notes\
-├── index.html # Frontend comparison table\
-├── data.json # Generated daily data (committed to repo)\
-├── .github/\
-│ └── workflows/\
-│ └── update-data.yml # Daily cron job\
-└── README.md\
+├── scraper.js # Main scraper with provider-specific parsers
+├── notes.js # Human-curated provider notes
+├── index.html # Frontend comparison table
+├── data.json # Generated daily data (committed to repo)
+├── .github/
+│ └── workflows/
+│ └── update-data.yml # Daily cron job
+└── README.md
 </pre>
 
 ## 🧩 Parser anatomy
