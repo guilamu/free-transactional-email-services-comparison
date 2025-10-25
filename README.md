@@ -114,14 +114,7 @@ return null; // Falls back to curated data
 ```
 ## ⚙️ Automation
 
-GitHub Actions runs `scraper.js` daily at 2 AM UTC:
-name: Update Pricing Data
-on:
-schedule:
-- cron: '0 2 * * *' # Daily at 2 AM UTC
-workflow_dispatch: # Manual trigger
-
-Results are committed back to the repo and deployed via GitHub Pages.
+GitHub Actions runs `scraper.js` daily at 2 AM UTC: - name: Update Pricing Data on: schedule: - cron: '0 2 * * *' # Daily at 2 AM UTC workflow_dispatch: # Manual trigger Results are committed back to the repo and deployed via GitHub Pages.
 
 ## 🔍 Data format
 
