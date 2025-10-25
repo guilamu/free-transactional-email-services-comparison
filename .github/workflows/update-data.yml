@@ -1,4 +1,0 @@
-- name: Update README
-  run: |
-    node update-readme.js
-    git add README.md
