@@ -6,10 +6,10 @@ const data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
 // Extract provider names
 const providers = data.map(s => s.name).sort();
 
-// Group them for better formatting (4 per line)
+// Group them for better formatting (1 per line)
 const grouped = [];
-for (let i = 0; i < providers.length; i += 4) {
-  grouped.push(providers.slice(i, i + 4).join(', '));
+for (let i = 0; i < providers.length; i += 1) {
+  grouped.push(providers.slice(i, i + 1).join(', '));
 }
 
 // Build markdown list
