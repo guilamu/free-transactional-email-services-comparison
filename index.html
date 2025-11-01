@@ -126,6 +126,11 @@
 <script src="notes.js"></script>
 
 <script>
+  // In table cell rendering
+  const maxMonthly = Math.max(...data.map(s => s.monthlyLimit));
+  const barWidth = (service.monthlyLimit / maxMonthly) * 100;
+  cell.innerHTML += `<div class="limit-bar" style="width:${barWidth}%"></div>`;
+
   // Safe fallback if notes.js fails to load
   window.providerNotes = window.providerNotes || {};
 
