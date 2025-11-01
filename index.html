@@ -71,12 +71,6 @@
       #pricesTable th:nth-child(4),
       #pricesTable td:nth-child(4) { display: none; }
     }
-    .limit-bar {
-     height: 4px;
-     background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-     margin-top: 4px;
-     border-radius: 2px;
-    }
   </style>
 </head>
 <body>
@@ -126,11 +120,6 @@
 <script src="notes.js"></script>
 
 <script>
-  // In table cell rendering
-  const maxMonthly = Math.max(...data.map(s => s.monthlyLimit));
-  const barWidth = (service.monthlyLimit / maxMonthly) * 100;
-  cell.innerHTML += `<div class="limit-bar" style="width:${barWidth}%"></div>`;
-
   // Safe fallback if notes.js fails to load
   window.providerNotes = window.providerNotes || {};
 
