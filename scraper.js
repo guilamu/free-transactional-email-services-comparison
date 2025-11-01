@@ -14,7 +14,7 @@ const fallbackData = [
   { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing' },
   { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/' },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/' },
-  { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/pricing' },  
+  { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/help/plans-features-and-limits' },
   { name: 'Postmark', dailyLimit: 100, monthlyLimit: 100, url: 'https://postmarkapp.com/pricing' },
   { name: 'Maileroo', dailyLimit: 3000, monthlyLimit: 3000, url: 'https://maileroo.com/pricing' },
   { name: 'Sweego', dailyLimit: 100, monthlyLimit: 3000, url: 'https://api.sweego.io/billing/plans' },
@@ -301,21 +301,58 @@ if (name === 'Amazon SES') {
     }
     return null;
   }
+  
+// --- MailerSend ---
+if (name === 'MailerSend') {
+  const page = text.replace(/\s+/g, ' ');
 
-  // --- MailerSend ---
-  if (name === 'MailerSend') {
-    if (lowerText.includes('500 emails per month') || lowerText.includes('500 emails/month')) {
-      return { dailyLimit: 100, monthlyLimit: 500, note: 'Requires credit card' };
+  // Strategy 1: Target the table structure "Free plan Emails/month 500"
+  const tableMatch = page.match(/Free\s+plan[^]*?Emails?\s*\/?\s*month[^]*?(\d+)/i);
+  
+  if (tableMatch) {
+    const monthly = parseInt(tableMatch[1], 10);
+    if (monthly === 500) {
+      return {
+        dailyLimit: 100,  // Explicitly stated in the help page
+        monthlyLimit: monthly,
+        note: null
+      };
     }
-    const monthMatch = text.match(/free[^]*?(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:per|\/)\s*month\b/i);
-    if (monthMatch) {
-      const monthly = parseInt(monthMatch[1].replace(/,/g, ''), 10);
-      if (monthly > 0) {
-        return { dailyLimit: Math.floor(monthly / 30), monthlyLimit: monthly, note: 'Requires credit card' };
-      }
-    }
-    return null;
   }
+
+  // Strategy 2: Look for "500 emails a month" in Free plan description
+  const freePlanMatch = page.match(/Free\s+plan[^]{0,200}?(\d+)\s+emails?\s+(?:a|per)\s+month/i);
+  
+  if (freePlanMatch) {
+    const monthly = parseInt(freePlanMatch[1], 10);
+    if (monthly > 0 && monthly <= 1000) {
+      return {
+        dailyLimit: 100,
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
+  }
+
+  // Strategy 3: Look for daily limit mention
+  const dailyMatch = page.match(/daily\s+limit\s+of\s+(\d+)\s+emails?/i);
+  const monthlyFallback = page.match(/(\d+)\s+emails?\s+(?:a|per)\s+month/i);
+  
+  if (dailyMatch && monthlyFallback) {
+    const daily = parseInt(dailyMatch[1], 10);
+    const monthly = parseInt(monthlyFallback[1], 10);
+    
+    if (daily === 100 && monthly === 500) {
+      return {
+        dailyLimit: daily,
+        monthlyLimit: monthly,
+        note: null
+      };
+    }
+  }
+
+  return null;
+}
 
 // --- Resend ---
 if (name === 'Resend') {
@@ -530,7 +567,7 @@ async function scrapeAll() {
   const servicesToScrape = [
     { name: 'SendPulse', url: 'https://sendpulse.com/prices/smtp' },
     { name: 'Mailgun', url: 'https://www.mailgun.com/pricing/' },
-    { name: 'MailerSend', url: 'https://www.mailersend.com/pricing' },
+    { name: 'MailerSend', url: 'https://www.mailersend.com/help/plans-features-and-limits' },
     { name: 'Resend', url: 'https://resend.com/pricing' },
     { name: 'Brevo (Sendinblue)', url: 'https://www.brevo.com/pricing/' },
     { name: 'Mailjet', url: 'https://www.mailjet.com/pricing/' },
