@@ -86,28 +86,6 @@
 
     <div class="table-container">
       <div id="loading" class="loading">Loading pricing data...</div>
-
-          // Add to index.html before table
-    <div class="controls" style="padding:20px 30px;background:#f8f9fa;border-bottom:1px solid #e9ecef;">
-      <label style="margin-right:20px;">
-        Sort by: 
-        <select id="sortBy" style="padding:5px 10px;border-radius:4px;">
-          <option value="name">Name (A-Z)</option>
-          <option value="daily">Daily Limit (High→Low)</option>
-          <option value="monthly">Monthly Limit (High→Low)</option>
-        </select>
-      </label>
-      
-      <label style="margin-right:20px;">
-        <input type="checkbox" id="hideStatic"> Hide static providers
-      </label>
-      
-      <label>
-        <input type="checkbox" id="euOnly"> EU-based only
-      </label>
-    </div>
-      // End - Add to index.html before table
-      
       <table id="pricesTable" style="display:none;">
         <thead>
           <tr>
