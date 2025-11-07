@@ -12,6 +12,7 @@ const fallbackData = [
   { name: 'Mailjet', dailyLimit: 200, monthlyLimit: 6000, url: 'https://www.mailjet.com/pricing/' },
   { name: 'Mailgun', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.mailgun.com/pricing/' },
   { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing' },
+  { name: 'Loops', dailyLimit: 133, monthlyLimit: 4000, url: 'https://loops.so/docs/account/free-plan' },
   { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/' },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/help/plans-features-and-limits' },
@@ -43,6 +44,25 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
 
+   // --- Loops ---
+  if (name === 'Loops') {
+    const page = text.replace(/\s+/g, ' ');
+
+    // Look for "4,000 emails every 30 days" or similar patterns
+    const monthlyMatch = 
+      page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*every\s*30\s*days/i) ||
+      page.match(/up\s*to\s*(\d{1,3}(?:,\d{3})*)\s*emails?\s*every\s*30\s*days/i);
+
+    if (monthlyMatch) {
+      const monthly = parseInt(monthlyMatch[1].replace(/,/g, ''), 10);
+      if (monthly > 0) {
+        return { dailyLimit: null, monthlyLimit: monthly, note: null };
+      }
+    }
+
+    return null;
+  }
+ 
 // --- EmailLabs ---
 if (name === 'EmailLabs') {
   const page = text.replace(/\s+/g, ' ');
@@ -576,7 +596,8 @@ async function scrapeAll() {
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
     { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' },
-    { name: 'EmailLabs', url: 'https://emaillabs.io/en/plan-comparison/' }
+    { name: 'EmailLabs', url: 'https://emaillabs.io/en/plan-comparison/' },
+    { name: 'Loops', url: 'https://loops.so/docs/account/free-plan' }
   ];
 
   const results = [];
