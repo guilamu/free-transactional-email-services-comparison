@@ -13,6 +13,5 @@ window.providerNotes = {
   "Mailchimp Transactional": "Best when on Mailchimp; strict compliance/reputation.",
   "Postmark": "Excellent deliverability/speed; clear events & template tools.",
   "Sweego": "EU-based, Email + SMS; test mode, webhooks, templates; 7-day logs.",
-  "EmailLabs": "EU-based, SMTP/API; CSA certified; 1-day logs; dedicated IP.",
-  "Loops": "US-based, marketing + transactional; Y Combinator; no daily limit."
+  "EmailLabs": "EU-based, SMTP/API; CSA certified; 1-day logs; dedicated IP."
 };
