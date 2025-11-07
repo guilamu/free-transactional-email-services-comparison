@@ -12,7 +12,7 @@ const fallbackData = [
   { name: 'Mailjet', dailyLimit: 200, monthlyLimit: 6000, url: 'https://www.mailjet.com/pricing/' },
   { name: 'Mailgun', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.mailgun.com/pricing/' },
   { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing' },
-  { name: 'Loops', dailyLimit: 133, monthlyLimit: 4000, url: 'https://loops.so/docs/account/free-plan' },
+  { name: 'Loops', dailyLimit: 133, monthlyLimit: 4000, url: 'https://loops.so/docs/account/free-plan/' },
   { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/' },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/help/plans-features-and-limits' },
@@ -597,7 +597,7 @@ async function scrapeAll() {
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
     { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' },
     { name: 'EmailLabs', url: 'https://emaillabs.io/en/plan-comparison/' },
-    { name: 'Loops', url: 'https://loops.so/docs/account/free-plan' }
+    { name: 'Loops', url: 'https://loops.so/docs/account/free-plan/' }
   ];
 
   const results = [];
