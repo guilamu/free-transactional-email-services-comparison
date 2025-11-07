@@ -19,10 +19,11 @@ A simple, transparent comparison of **renewable free tier limits** built to save
 
 ## 📊 What's included?
 
-Only services with **renewable free tiers** are listed—no one-time trials or credit-only promos. Currently tracking **12 providers**:
+Only services with **renewable free tiers** are listed—no one-time trials or credit-only promos. Currently tracking **13 providers**:
 
 - Brevo (Sendinblue)
 - EmailLabs
+- Loops
 - MailerSend
 - Maileroo
 - Mailgun
