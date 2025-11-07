@@ -11,8 +11,7 @@ const fallbackData = [
   { name: 'Brevo (Sendinblue)', dailyLimit: 300, monthlyLimit: 9000, url: 'https://www.brevo.com/pricing/' },
   { name: 'Mailjet', dailyLimit: 200, monthlyLimit: 6000, url: 'https://www.mailjet.com/pricing/' },
   { name: 'Mailgun', dailyLimit: 100, monthlyLimit: 3000, url: 'https://www.mailgun.com/pricing/' },
-  { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing' },
-  { name: 'Loops', dailyLimit: 133, monthlyLimit: 4000, url: 'https://loops.so/pricing' },
+  { name: 'Resend', dailyLimit: 100, monthlyLimit: 3000, url: 'https://resend.com/pricing' },  
   { name: 'SMTP2GO', dailyLimit: 200, monthlyLimit: 1000, url: 'https://www.smtp2go.com/pricing/' },
   { name: 'Mailtrap', dailyLimit: 33, monthlyLimit: 1000, url: 'https://mailtrap.io/pricing/' },
   { name: 'MailerSend', dailyLimit: 100, monthlyLimit: 500, url: 'https://www.mailersend.com/help/plans-features-and-limits' },
@@ -44,26 +43,6 @@ function extractFromText(rawText, name) {
   const text = rawText.replace(/\u00A0/g, ' ');
   const lowerText = text.toLowerCase();
   
-  // --- Loops ---
-  if (name === 'Loops') {
-    const page = text.replace(/\s+/g, ' ');
-    
-    // Look for "4,000 emails" or similar patterns in the free plan section
-    const emailMatch = 
-      page.match(/free.*?(\d{1,3}(?:,\d{3})*)\s*emails?/i) ||
-      page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?.*?free/i) ||
-      page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:per|every)\s*(?:month|30\s*days)/i);
-    
-    if (emailMatch) {
-      const monthly = parseInt(emailMatch[1].replace(/,/g, ''), 10);
-      if (monthly > 0 && monthly <= 10000) {
-        return { dailyLimit: null, monthlyLimit: monthly, note: null };
-      }
-    }
-    
-    return null;
-  }
- 
 // --- EmailLabs ---
 if (name === 'EmailLabs') {
   const page = text.replace(/\s+/g, ' ');
@@ -597,8 +576,7 @@ async function scrapeAll() {
     { name: 'Postmark', url: 'https://postmarkapp.com/pricing' },
     { name: 'Maileroo', url: 'https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/' },
     { name: 'Sweego', url: 'https://api.sweego.io/billing/plans' },
-    { name: 'EmailLabs', url: 'https://emaillabs.io/en/plan-comparison/' },
-    { name: 'Loops', url: 'https://loops.so/pricing' }
+    { name: 'EmailLabs', url: 'https://emaillabs.io/en/plan-comparison/' }    
   ];
 
   const results = [];
