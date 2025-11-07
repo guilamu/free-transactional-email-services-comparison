@@ -486,16 +486,10 @@ if (name === 'Resend') {
     if (monthlyMatch) {
       const monthly = parseInt(monthlyMatch[1].replace(/,/g, ''), 10);
       if (monthly > 0) {
-        const daily = Math.floor(monthly / 30);
-        return { dailyLimit: daily, monthlyLimit: monthly, note: null };
+        return { dailyLimit: null, monthlyLimit: monthly, note: null };
       }
     }
 
-    return null;
-  }
-       return { dailyLimit: daily, monthlyLimit: monthly, note: null };
-      }
-    }
     return null;
   }
 
