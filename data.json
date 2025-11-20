@@ -5,7 +5,7 @@
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:24.188Z",
+    "lastScraped": "2025-11-20T06:24:04.090Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:33.219Z",
+    "lastScraped": "2025-11-20T06:24:13.314Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +25,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:50.347Z",
+    "lastScraped": "2025-11-20T06:24:31.799Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +35,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:35.373Z",
+    "lastScraped": "2025-11-20T06:24:15.640Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -43,11 +43,11 @@
     "name": "Mailtrap",
     "url": "https://mailtrap.io/pricing/",
     "dailyLimit": 150,
-    "monthlyLimit": 3500,
+    "monthlyLimit": 4000,
     "note": "Email API/SMTP",
-    "lastScraped": "2025-11-19T06:24:39.782Z",
+    "lastScraped": "2025-11-20T06:24:20.545Z",
     "scrapedSuccessfully": true,
-    "lastChanged": null
+    "lastChanged": "2025-11-20T06:24:33.800Z"
   },
   {
     "name": "Mailgun",
@@ -55,7 +55,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2025-11-19T06:24:26.408Z",
+    "lastScraped": "2025-11-20T06:24:06.292Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -65,7 +65,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:31.120Z",
+    "lastScraped": "2025-11-20T06:24:11.158Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -75,7 +75,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:45.047Z",
+    "lastScraped": "2025-11-20T06:24:26.029Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -85,7 +85,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:47.677Z",
+    "lastScraped": "2025-11-20T06:24:28.931Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -95,7 +95,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:37.695Z",
+    "lastScraped": "2025-11-20T06:24:18.061Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -105,7 +105,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": null,
-    "lastScraped": "2025-11-19T06:24:28.714Z",
+    "lastScraped": "2025-11-20T06:24:08.725Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -115,7 +115,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 100,
     "note": "Free Developer plan",
-    "lastScraped": "2025-11-19T06:24:42.454Z",
+    "lastScraped": "2025-11-20T06:24:23.441Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   }
