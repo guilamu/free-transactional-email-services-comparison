@@ -147,7 +147,7 @@ if (name === 'Maileroo') {
   }
 
   // Fallback: generic monthly, but avoid matching the inbound figure by requiring "outbound" nearby
-  const nearbyOutbound = page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:per|\/)\s*month[^\.]{0,80}?outbound/i);
+  const nearbyOutbound = page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*(?:per|\/)\s*month[^.]{0,80}?outbound/i);
   if (nearbyOutbound) {
     const monthly = parseInt(nearbyOutbound[1].replace(/,/g, ''), 10);
     return {
@@ -237,17 +237,15 @@ if (name === 'Postmark') {
   return null;
 }
 
-
-  
-  // Amazon SES specific
+// --- Amazon SES ---
 if (name === 'Amazon SES') {
   // Normalize whitespace to make regex more reliable
   const page = text.replace(/\s+/g, ' ');
 
   // Match phrases like: "3,000 message charges free each month" or "up to 3,000 ... free each month"
   const freeTierMatch =
-    page.match(/(\d{1,3}(?:,\d{3})*)\s*(?:message|messages|email|emails)\s*(?:charges\s*)?(?:free|included)[^\.]{0,120}?(?:per|each)\s*(?:month|mo)/i) ||
-    page.match(/up\s*to\s*(\d{1,3}(?:,\d{3})*)\s*(?:message|messages)\s*(?:charges\s*)?free[^\.]{0,120}?(?:per|each)\s*(?:month|mo)/i);
+    page.match(/(\d{1,3}(?:,\d{3})*)\s*(?:message|messages|email|emails)\s*(?:charges\s*)?(?:free|included)[^.]{0,120}?(?:per|each)\s*(?:month|mo)/i) ||
+    page.match(/up\s*to\s*(\d{1,3}(?:,\d{3})*)\s*(?:message|messages)\s*(?:charges\s*)?free[^.]{0,120}?(?:per|each)\s*(?:month|mo)/i);
 
   if (freeTierMatch) {
     const monthly = parseInt(freeTierMatch[1].replace(/,/g, ''), 10);
@@ -260,7 +258,7 @@ if (name === 'Amazon SES') {
   }
 
   // Optional: legacy EC2-only free allowance safeguard if ever present verbatim
-  const ec2Match = page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*per\s*month\s*free[^\.]{0,80}?Amazon\s*EC2/i);
+  const ec2Match = page.match(/(\d{1,3}(?:,\d{3})*)\s*emails?\s*per\s*month\s*free[^.]{0,80}?Amazon\s*EC2/i);
   if (ec2Match) {
     const monthly = parseInt(ec2Match[1].replace(/,/g, ''), 10);
     return {
@@ -397,8 +395,7 @@ if (name === 'Resend') {
   return null;
 }
 
-
-  // --- SMTP2GO (FIXED) ---
+// --- SMTP2GO (FIXED) ---
   if (name === 'SMTP2GO') {
     // Accept both "/ mo" and "per month", and capture daily if present
     const monthMatch =
@@ -599,7 +596,7 @@ async function scrapeAll() {
 
   console.log(`✓ Successfully scraped: ${results.length} services`);
   console.log(`✓ Using fallback data: ${missingServices.length} services\n`);
-
+  
   missingServices.forEach(service => {
     // Find previous data for this service
     const previous = previousData.find(p => p.name === service.name);
@@ -608,7 +605,9 @@ async function scrapeAll() {
       lastScraped: previous?.lastScraped || new Date().toISOString(),
       scrapedSuccessfully: false,
       // Preserve lastChanged if no new scrape
-      lastChanged: previous?.lastChanged || null
+      lastChanged: previous?.lastChanged || null,
+      // NEW: Preserve previous limit
+      previousMonthlyLimit: previous?.previousMonthlyLimit || null
     });
   });
 
@@ -619,17 +618,25 @@ async function scrapeAll() {
       const limitsChanged =
         previous.dailyLimit !== service.dailyLimit ||
         previous.monthlyLimit !== service.monthlyLimit;
+      
       if (limitsChanged) {
         console.log(`🔄 CHANGE DETECTED: ${service.name}`);
         console.log(` Old: ${previous.dailyLimit}/day, ${previous.monthlyLimit}/month`);
         console.log(` New: ${service.dailyLimit}/day, ${service.monthlyLimit}/month`);
+        
         service.lastChanged = new Date().toISOString();
+        // NEW: Store the OLD monthly limit so the UI can compare
+        service.previousMonthlyLimit = previous.monthlyLimit;
+        
       } else {
         service.lastChanged = previous.lastChanged || null;
+        // NEW: Keep the old previousMonthlyLimit if nothing changed
+        service.previousMonthlyLimit = previous.previousMonthlyLimit;
       }
     } else {
       // New service - set lastChanged to now
       service.lastChanged = new Date().toISOString();
+      service.previousMonthlyLimit = null;
     }
   });
 
@@ -654,7 +661,8 @@ scrapeAll().catch(error => {
       ...f,
       lastScraped: previous?.lastScraped || new Date().toISOString(),
       lastChanged: previous?.lastChanged || null,
-      scrapedSuccessfully: false
+      scrapedSuccessfully: false,
+      previousMonthlyLimit: previous?.previousMonthlyLimit || null
     };
   });
   fallbackWithDates.sort((a, b) => b.monthlyLimit - a.monthlyLimit);
