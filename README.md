@@ -141,7 +141,7 @@ GitHub Actions runs `scraper.js` daily at 2 AM UTC: - name: Update Pricing Data 
 
 ## ⚖️ License & Disclaimer
 
-- **Code**: MIT License
+- **Code**: This project is licensed under the GNU AGPL.
 - **Data**: Compiled from publicly available pricing pages
 - **Accuracy**: Always verify limits on official provider sites before committing
 - **Affiliation**: No affiliate relationships with any provider
