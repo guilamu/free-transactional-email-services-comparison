@@ -60,6 +60,19 @@
     .status-fallback { background: #fff3cd; color: #856404; }
     .date-cell { font-size: 0.85rem; color: #6c757d; }
     .loading { text-align: center; padding: 60px 30px; color: #6c757d; }
+    
+    /* NEW STYLES FOR TREND ARROWS */
+    .trend-arrow {
+      margin-left: 6px;
+      font-weight: bold;
+      cursor: help;
+      text-decoration: none;
+      font-size: 1rem;
+      vertical-align: middle;
+    }
+    .trend-up { color: #28a745; }
+    .trend-down { color: #dc3545; }
+
     footer {
       background: #f8f9fa; padding: 20px 30px; text-align: center;
       font-size: 0.85rem; color: #6c757d; border-top: 1px solid #e9ecef;
@@ -167,9 +180,31 @@
         upd.className = 'date-cell';
         upd.textContent = formatDate(service.lastScraped);
 
+        // CHANGED: Logic for Last Change column with Arrows
         const chg = row.insertCell(6);
         chg.className = 'date-cell';
-        chg.textContent = formatDate(service.lastChanged);
+        
+        let content = formatDate(service.lastChanged);
+
+        // Check if we have previous limit data to compare
+        if (typeof service.previousMonthlyLimit === 'number' && service.monthlyLimit) {
+          const current = service.monthlyLimit;
+          const previous = service.previousMonthlyLimit;
+          const diff = current - previous;
+
+          if (diff !== 0) {
+            const direction = diff > 0 ? 'up' : 'down';
+            const arrowChar = diff > 0 ? '↑' : '↓';
+            const colorClass = diff > 0 ? 'trend-up' : 'trend-down';
+            const diffText = diff > 0 ? `+${diff.toLocaleString()}` : diff.toLocaleString();
+            
+            // Tooltip with details
+            const tooltip = `Previous: ${previous.toLocaleString()} emails/month (${diffText})`;
+
+            content += `<span class="trend-arrow ${colorClass}" title="${tooltip}">${arrowChar}</span>`;
+          }
+        }
+        chg.innerHTML = content;
       });
 
       document.getElementById('loading').style.display = 'none';
@@ -183,4 +218,3 @@
 </script>
 </body>
 </html>
-
