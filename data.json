@@ -5,7 +5,7 @@
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:04.938Z",
+    "lastScraped": "2026-08-29T12:11:23.962Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:14.106Z",
+    "lastScraped": "2026-08-29T12:11:33.660Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +25,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:31.347Z",
+    "lastScraped": "2026-08-29T12:11:51.370Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +35,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:16.265Z",
+    "lastScraped": "2026-08-29T12:11:35.975Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -45,7 +45,7 @@
     "dailyLimit": 150,
     "monthlyLimit": 4000,
     "note": "Email API/SMTP",
-    "lastScraped": "2026-08-28T18:08:20.638Z",
+    "lastScraped": "2026-08-29T12:11:40.816Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2026-04-10T07:22:08.276Z",
     "previousMonthlyLimit": 1000
@@ -56,7 +56,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2026-08-28T18:08:07.195Z",
+    "lastScraped": "2026-08-29T12:11:26.114Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -66,7 +66,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:12.030Z",
+    "lastScraped": "2026-08-29T12:11:30.721Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -76,7 +76,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:25.234Z",
+    "lastScraped": "2026-08-29T12:11:45.781Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -86,7 +86,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:27.860Z",
+    "lastScraped": "2026-08-29T12:11:48.596Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -96,7 +96,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:18.484Z",
+    "lastScraped": "2026-08-29T12:11:38.214Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -106,7 +106,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": null,
-    "lastScraped": "2026-08-28T18:08:09.720Z",
+    "lastScraped": "2026-08-29T12:11:28.456Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -116,7 +116,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 100,
     "note": "Free Developer plan",
-    "lastScraped": "2026-08-28T18:08:22.744Z",
+    "lastScraped": "2026-08-29T12:11:43.124Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   }
