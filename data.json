@@ -5,7 +5,7 @@
     "dailyLimit": 400,
     "monthlyLimit": 12000,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:10.634Z",
+    "lastScraped": "2026-09-14T11:37:43.210Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -15,7 +15,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:20.926Z",
+    "lastScraped": "2026-09-14T11:37:52.433Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -25,7 +25,7 @@
     "dailyLimit": 300,
     "monthlyLimit": 9000,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:37.929Z",
+    "lastScraped": "2026-09-14T11:38:10.334Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -35,7 +35,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 6000,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:23.165Z",
+    "lastScraped": "2026-09-14T11:37:54.682Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -45,7 +45,7 @@
     "dailyLimit": 150,
     "monthlyLimit": 4000,
     "note": "Email API/SMTP",
-    "lastScraped": "2026-09-13T11:00:27.882Z",
+    "lastScraped": "2026-09-14T11:37:59.424Z",
     "scrapedSuccessfully": true,
     "lastChanged": "2026-04-10T07:22:08.276Z",
     "previousMonthlyLimit": 1000
@@ -56,7 +56,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": "Free plan - no credit card required",
-    "lastScraped": "2026-09-13T11:00:12.728Z",
+    "lastScraped": "2026-09-14T11:37:45.389Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -66,17 +66,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:17.690Z",
-    "scrapedSuccessfully": true,
-    "lastChanged": null
-  },
-  {
-    "name": "Maileroo",
-    "url": "https://maileroo.com/help/what-are-the-difference-between-free-paid-plans/",
-    "dailyLimit": 100,
-    "monthlyLimit": 3000,
-    "note": null,
-    "lastScraped": "2026-09-13T11:00:32.547Z",
+    "lastScraped": "2026-09-14T11:37:50.292Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -86,9 +76,19 @@
     "dailyLimit": 100,
     "monthlyLimit": 3000,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:35.255Z",
+    "lastScraped": "2026-09-14T11:38:07.523Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
+  },
+  {
+    "name": "Maileroo",
+    "dailyLimit": 3000,
+    "monthlyLimit": 3000,
+    "url": "https://maileroo.com/pricing",
+    "lastScraped": "2026-09-13T11:00:32.547Z",
+    "scrapedSuccessfully": false,
+    "lastChanged": "2026-09-14T11:38:12.336Z",
+    "previousMonthlyLimit": 3000
   },
   {
     "name": "SMTP2GO",
@@ -96,7 +96,7 @@
     "dailyLimit": 200,
     "monthlyLimit": 1000,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:25.553Z",
+    "lastScraped": "2026-09-14T11:37:57.021Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -106,7 +106,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 500,
     "note": null,
-    "lastScraped": "2026-09-13T11:00:15.215Z",
+    "lastScraped": "2026-09-14T11:37:48.047Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   },
@@ -116,7 +116,7 @@
     "dailyLimit": 100,
     "monthlyLimit": 100,
     "note": "Free Developer plan",
-    "lastScraped": "2026-09-13T11:00:30.071Z",
+    "lastScraped": "2026-09-14T11:38:01.727Z",
     "scrapedSuccessfully": true,
     "lastChanged": null
   }
